@@ -448,8 +448,21 @@ const SE={flowering:'🟢',seeding:'🟡',dormant:'⚪',selected:'🔵'};
 const TC={ranunculus:'tp-ran',sweetpea:'tp-swe',calendula:'tp-cal',other:'tp-oth'};
 const PSB={flowering:'psb-flowering',seeding:'psb-seeding',dormant:'psb-dormant',selected:'psb-selected'};
 
-async function load(){try{const r=await window.storage.get('vdb_v5');if(r?.value)DB=JSON.parse(r.value);}catch(e){DB=[];}}
-async function save(){try{await window.storage.set('vdb_v5',JSON.stringify(DB));}catch(e){}}
+async function load(){
+  try{
+    const raw = localStorage.getItem('vdb_v5');
+    if(raw) DB = JSON.parse(raw);
+  }catch(e){
+    DB = [];
+  }
+}
+
+async function save(){
+  try{
+    localStorage.setItem('vdb_v5', JSON.stringify(DB));
+  }catch(e){}
+}
+
 
 async function boot(){
   await load();
