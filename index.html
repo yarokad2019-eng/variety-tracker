@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Variety Pro — מעקב זנים</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#173723">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Variety Pro">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bnav-h: 88px; /* bottom bar total occupied height */
+  --fab-gap: 16px;
+
+  --bg:#0f1411;
+  --bg2:#121a14;
+  --card:#161f18;
+  --card2:#1b261e;
+  --line:rgba(255,255,255,.10);
+  --soft:rgba(255,255,255,.70);
+  --muted:rgba(255,255,255,.55);
+  --text:rgba(255,255,255,.92);
+  --accent:#2ee59d;
+  --accent2:#65d46e;
+  --warn:#ffb020;
+  --bad:#ff5b6b;
+  --sky:#48b4ff;
+
+  --r:16px;
+  --shadow: 0 10px 28px rgba(0,0,0,.35);
+  --shadow2: 0 8px 18px rgba(0,0,0,.25);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:'Heebo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background: radial-gradient(1200px 600px at 70% -10%, rgba(46,229,157,.20), transparent 55%),
+              radial-gradient(900px 500px at 0% 10%, rgba(72,180,255,.12), transparent 55%),
+              linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--text);
+  padding-bottom: calc(var(--bnav-h) + env(safe-area-inset-bottom));
+}
+
+/* Top bar */
+.top{
+  position:sticky; top:0; z-index:50;
+  padding: 14px 16px 12px;
+  background: rgba(15,20,17,.82);
+  backdrop-filter: blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.top-row{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.brand{
+  display:flex; align-items:center; gap:10px; min-width:0;
+}
+.logo{
+  width:40px; height:40px; border-radius:14px;
+  background: linear-gradient(135deg, rgba(46,229,157,.24), rgba(72,180,255,.18));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow: var(--shadow2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+}
+.btxt{min-width:0}
+.btxt .t1{font-weight:900; font-size:15px; letter-spacing:-.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.btxt .t2{font-size:11px; color:var(--muted); margin-top:2px}
+
+.actions{display:flex; gap:8px}
+.btn{
+  border:none; cursor:pointer; color:var(--text);
+  background: rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius: 12px;
+  padding: 9px 11px;
+  font-weight:800;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.btn:active{transform:scale(.98)}
+.btn.primary{background: linear-gradient(135deg, rgba(46,229,157,.24), rgba(46,229,157,.10)); border-color: rgba(46,229,157,.28)}
+.btn.danger{background: rgba(255,91,107,.14); border-color: rgba(255,91,107,.30)}
+.btn.small{padding:7px 9px; border-radius:11px; font-weight:900; font-size:12px}
+
+.kpis{
+  display:flex; gap:10px; overflow:auto; padding-top:12px;
+  scrollbar-width:none;
+}
+.kpis::-webkit-scrollbar{display:none}
+.kpi{
+  flex:0 0 auto;
+  min-width:92px;
+  padding:10px 12px;
+  border-radius:14px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+.kpi .n{font-size:20px; font-weight:900; line-height:1}
+.kpi .l{font-size:10px; color:var(--muted); margin-top:3px; font-weight:700}
+
+/* Tabs */
+.tabs{
+  position:sticky; top:92px; z-index:45;
+  display:flex; gap:8px;
+  padding: 10px 16px;
+  background: rgba(15,20,17,.62);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.tab{
+  flex:1;
+  text-align:center;
+  padding:10px 8px;
+  border-radius: 14px;
+  cursor:pointer;
+  font-weight:900;
+  font-size:12px;
+  color: var(--muted);
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+.tab.on{
+  color: var(--text);
+  background: linear-gradient(135deg, rgba(46,229,157,.22), rgba(72,180,255,.12));
+  border-color: rgba(46,229,157,.28);
+}
+
+/* Content */
+.wrap{max-width:780px; margin:0 auto; padding: 14px 16px calc(14px + var(--bnav-h));}
+.row{display:flex; gap:10px; align-items:center}
+.grow{flex:1}
+
+/* Search & filters */
+.search{
+  display:flex; gap:10px; align-items:center;
+  margin-bottom:12px;
+}
+.inp{
+  width:100%;
+  padding:12px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  outline:none;
+  font-weight:700;
+}
+.inp::placeholder{color: rgba(255,255,255,.45)}
+.pills{
+  display:flex; gap:8px; overflow:auto; padding-bottom:2px; scrollbar-width:none
+}
+.pills::-webkit-scrollbar{display:none}
+.pill{
+  flex:0 0 auto;
+  padding:8px 12px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  color: var(--soft);
+  font-weight:900;
+  font-size:12px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.pill.on{background: rgba(46,229,157,.18); border-color: rgba(46,229,157,.30); color: var(--text)}
+
+/* Card list */
+.grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+}
+@media (min-width:700px){
+  .grid{grid-template-columns: 1fr 1fr}
+}
+
+.card{
+  border-radius: var(--r);
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  overflow:hidden;
+  box-shadow: var(--shadow2);
+}
+.hero{
+  height: 170px;
+  background: rgba(0,0,0,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  cursor:pointer;
+}
+.hero img{width:100%; height:100%; object-fit:cover; display:block}
+.badge{
+  position:absolute; top:10px; right:10px;
+  padding:6px 10px;
+  border-radius: 999px;
+  font-weight:900; font-size:11px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+}
+.b-selected{border-color: rgba(255,176,32,.35); background: rgba(255,176,32,.18)}
+.b-flowering{border-color: rgba(101,212,110,.35); background: rgba(101,212,110,.16)}
+.b-seeding{border-color: rgba(255,176,32,.35); background: rgba(255,176,32,.16)}
+.b-dormant{border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.08)}
+.count{
+  position:absolute; bottom:10px; left:10px;
+  padding:5px 10px;
+  border-radius: 999px;
+  font-weight:900; font-size:11px;
+  background: rgba(0,0,0,.40);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.body{padding:12px 12px 10px}
+.name{font-weight:900; font-size:15px; line-height:1.2}
+.meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; align-items:center}
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.20);
+  color: var(--soft);
+  font-size:11px;
+  font-weight:900;
+}
+.dot{width:10px; height:10px; border-radius:999px; border:1px solid rgba(255,255,255,.25)}
+.stars{letter-spacing:1px; color: rgba(255,176,32,.95)}
+.small{font-size:11px; color:var(--muted); font-weight:700}
+.actions2{
+  display:flex; gap:8px; padding: 10px 12px 12px;
+  border-top:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.14);
+}
+.actions2 .btn{flex:1; justify-content:center}
+
+/* Empty */
+.empty{
+  padding: 44px 16px;
+  text-align:center;
+  border-radius: var(--r);
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+}
+.empty .ic{font-size:44px}
+.empty .h{font-weight:900; font-size:16px; margin-top:10px}
+.empty .p{color:var(--muted); font-weight:700; font-size:12px; margin-top:8px; line-height:1.6}
+
+/* Bottom nav + FAB */
+.bnav{
+  min-height: var(--bnav-h);
+  position:fixed; left:0; right:0; bottom:0;
+  padding: 10px 14px calc(16px + env(safe-area-inset-bottom));
+  background: rgba(15,20,17,.78);
+  backdrop-filter: blur(12px);
+  border-top:1px solid rgba(255,255,255,.10);
+  display:flex; justify-content:space-around; gap:10px;
+  z-index:60;
+}
+.navit{
+  flex:1;
+  text-align:center;
+  color: var(--muted);
+  font-weight:900;
+  font-size:11px;
+  cursor:pointer;
+}
+.navit .ic{font-size:22px}
+.navit.on{color: var(--text)}
+.fab{
+  position:fixed;
+  left:16px;
+  bottom: calc(var(--bnav-h) + var(--fab-gap) + env(safe-area-inset-bottom));
+  width:60px; height:60px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(46,229,157,.95), rgba(101,212,110,.85));
+  color:#07110b;
+  border:none;
+  box-shadow: 0 16px 36px rgba(0,0,0,.45);
+  font-size:28px;
+  cursor:pointer;
+  z-index:70;
+}
+.fab:active{transform:scale(.98)}
+
+/* Modal / sheet */
+.overlay{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.55);
+  display:none;
+  align-items:flex-end;
+  z-index:100;
+}
+.overlay.on{display:flex}
+.sheet{
+  width:100%;
+  max-height: 92vh;
+  overflow:auto;
+  border-radius: 22px 22px 0 0;
+  background: rgba(18,26,20,.98);
+  border-top:1px solid rgba(255,255,255,.12);
+  padding: 14px 16px 18px;
+  box-shadow: var(--shadow);
+}
+.handle{width:44px; height:4px; border-radius:999px; background: rgba(255,255,255,.18); margin: 6px auto 12px}
+.hdr2{display:flex; justify-content:space-between; align-items:center; gap:10px}
+.hdr2 .ttl{font-weight:900; font-size:16px}
+.hdr2 .sub{color:var(--muted); font-weight:700; font-size:11px; margin-top:2px}
+.section{margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,.10)}
+.lbl{font-weight:900; font-size:11px; color: var(--muted); letter-spacing:.2px; margin-bottom:7px}
+.select, .txt, .area{
+  width:100%;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  outline:none;
+  font-weight:800;
+}
+.area{min-height:90px; resize:vertical; font-weight:700}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+@media (max-width:420px){.grid2{grid-template-columns:1fr}}
+
+.photoPick{
+  border: 1px dashed rgba(255,255,255,.20);
+  background: rgba(255,255,255,.06);
+  border-radius: 16px;
+  padding: 14px;
+  text-align:center;
+  cursor:pointer;
+}
+.photoPick .ic{font-size:34px}
+.photoPick .t{margin-top:8px; font-weight:900}
+.photoPick .s{margin-top:4px; color:var(--muted); font-weight:700; font-size:12px; line-height:1.55}
+.photoPick input{display:none}
+.pgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px}
+.pcell{
+  aspect-ratio:1;
+  border-radius: 14px;
+  overflow:hidden;
+  position:relative;
+  background: rgba(0,0,0,.20);
+  border:1px solid rgba(255,255,255,.10);
+}
+.pcell img{width:100%; height:100%; object-fit:cover; display:block}
+.pdel{
+  position:absolute; top:6px; right:6px;
+  width:26px; height:26px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.45);
+  color: var(--text);
+  cursor:pointer;
+  font-weight:900;
+}
+
+.gpsRow{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding: 12px;
+  border-radius: 16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+}
+.gpsRow .g1{font-weight:900}
+.gpsRow .g2{color:var(--muted); font-weight:800; font-size:11px; margin-top:2px}
+.good{color: var(--accent2)}
+.bad{color: var(--bad)}
+
+/* Color picker */
+.colors{display:flex; flex-wrap:wrap; gap:10px}
+.csw{
+  width:34px; height:34px;
+  border-radius: 999px;
+  cursor:pointer;
+  border:2px solid rgba(255,255,255,.10);
+}
+.csw.on{outline: 3px solid rgba(46,229,157,.60); outline-offset:2px}
+
+/* Rating */
+.rrow{display:flex; gap:6px; font-size:30px; cursor:pointer; user-select:none}
+.rstar{color: rgba(255,255,255,.20)}
+.rstar.on{color: rgba(255,176,32,.95)}
+
+/* Detail modal */
+.heroBig{height: 230px; border-radius: 18px; overflow:hidden; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.18); position:relative}
+.heroBig img{width:100%; height:100%; object-fit:cover; display:block}
+.dots{position:absolute; left:50%; bottom:12px; transform:translateX(-50%); display:flex; gap:7px}
+.dot2{width:8px; height:8px; border-radius:999px; background: rgba(255,255,255,.35)}
+.dot2.on{background: rgba(255,255,255,.95)}
+.card2{margin-top:12px; border-radius: 18px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.06); padding: 12px}
+.h3{font-weight:900; font-size:11px; color: var(--muted); letter-spacing:.2px; margin-bottom:10px}
+.lineitem{display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.08); font-weight:800; font-size:13px}
+.lineitem:last-child{border-bottom:none}
+.key{color: var(--muted); font-weight:900}
+.val{color: var(--text); font-weight:900}
+.mapLink{
+  display:flex; gap:8px; align-items:center;
+  text-decoration:none;
+  color: var(--sky);
+  font-weight:900;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border:1px solid rgba(72,180,255,.25);
+  background: rgba(72,180,255,.10);
+  margin-top:12px;
+}
+.tl{margin-top:8px}
+.tli{display:flex; gap:10px; padding:8px 0}
+.tld{width:8px; height:8px; border-radius:999px; background: rgba(101,212,110,.75); margin-top:6px}
+.tlt{font-weight:800; font-size:12px}
+.tls{color:var(--muted); font-weight:800; font-size:10px; margin-top:2px}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top: 18px;
+  left:50%;
+  transform: translateX(-50%) translateY(-90px);
+  background: rgba(0,0,0,.55);
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(12px);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight:900;
+  z-index:120;
+  transition: transform .25s ease;
+  box-shadow: var(--shadow2);
+  max-width: calc(100vw - 28px);
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+.toast.on{transform: translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-row">
+    <div class="brand">
+      <div class="logo">🌿</div>
+      <div class="btxt">
+        <div class="t1">Variety Pro</div>
+        <div class="t2">תיעוד שטח · תמונות · GPS · עונות</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn small" id="btnExport" title="גיבוי/ייצוא">📦 גיבוי</button>
+      <button class="btn small" id="btnImport" title="ייבוא">📥 ייבוא</button>
+      <button class="btn small danger" id="btnReset" title="איפוס (מסוכן)">🧨</button>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+</div>
+
+<div class="tabs">
+  <div class="tab on" data-tab="list">📋 זנים</div>
+  <div class="tab" data-tab="field">🗺 שדה</div>
+  <div class="tab" data-tab="season">📅 עונה</div>
+</div>
+
+<div class="wrap">
+  <!-- LIST VIEW -->
+  <div id="view-list">
+    <div class="search">
+      <input class="inp grow" id="q" placeholder="חפש שם / מיקום / מאפיין…" autocomplete="off">
+      <button class="btn small" id="btnSort" title="מיין">↕️</button>
+    </div>
+
+    <div class="pills" id="filters"></div>
+    <div style="height:10px"></div>
+
+    <div class="grid" id="list"></div>
+    <div id="empty" style="display:none"></div>
+  </div>
+
+  <!-- FIELD VIEW -->
+  <div id="view-field" style="display:none">
+    <div class="small" style="margin-bottom:10px">קיבוץ לפי מיקום כתוב או לפי קואורדינטות (אם קיימות).</div>
+    <div id="field"></div>
+  </div>
+
+  <!-- SEASON VIEW -->
+  <div id="view-season" style="display:none">
+    <div class="small" style="margin-bottom:10px" id="seasonTitle"></div>
+    <div id="season"></div>
+  </div>
+</div>
+
+<button class="fab" id="fab">＋</button>
+
+<div class="bnav">
+  <div class="navit on" data-tab="list"><div class="ic">📋</div>זנים</div>
+  <div class="navit" data-tab="field"><div class="ic">🗺</div>שדה</div>
+  <div class="navit" data-tab="season"><div class="ic">📅</div>עונה</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ADD / EDIT -->
+<div class="overlay" id="modal" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="handle"></div>
+
+    <div class="hdr2">
+      <div>
+        <div class="ttl" id="mTitle">הוספת זן</div>
+        <div class="sub" id="mSub">הכול נשמר אוטומטית במכשיר (לא ייעלם בריפרש).</div>
+      </div>
+      <button class="btn small" id="mClose">סגור ✕</button>
+    </div>
+
+    <div class="section">
+      <div class="lbl">📷 תמונות</div>
+      <div class="photoPick" id="photoPick">
+        <div class="ic">📷</div>
+        <div class="t">צילום / גלריה (עד 8)</div>
+        <div class="s">טיפ: צלם קלוז-אפ של פרח + תמונת שורה/עמדה.</div>
+        <input type="file" id="photoIn" accept="image/*" multiple>
+      </div>
+      <div class="pgrid" id="pgrid"></div>
+    </div>
+
+    <div class="section">
+      <div class="lbl">שם הזן / קוד</div>
+      <input class="txt" id="fName" placeholder="לדוגמה: Yankel Dudel – שורה 4 / R-007">
+    </div>
+
+    <div class="section grid2">
+      <div>
+        <div class="lbl">סוג</div>
+        <select class="select" id="fType">
+          <option value="ranunculus">נוריות 🌺</option>
+          <option value="sweetpea">Sweet Pea 🌸</option>
+          <option value="calendula">Calendula 🌼</option>
+          <option value="other">אחר 🌿</option>
+        </select>
+      </div>
+      <div>
+        <div class="lbl">סטטוס</div>
+        <select class="select" id="fStatus">
+          <option value="flowering">🟢 בפריחה</option>
+          <option value="seeding">🟡 בזרעים</option>
+          <option value="dormant">⚪ רדום</option>
+          <option value="selected">⭐ נבחר</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="lbl">🎨 צבע</div>
+      <div class="colors" id="colors"></div>
+    </div>
+
+    <div class="section">
+      <div class="lbl">⭐ דירוג</div>
+      <div class="rrow" id="rating"></div>
+    </div>
+
+    <div class="section">
+      <div class="lbl">📍 מיקום (טקסט)</div>
+      <input class="txt" id="fLoc" placeholder="לדוגמה: גוש B, שורה 2, עמדה 7">
+    </div>
+
+    <div class="section">
+      <div class="lbl">📡 GPS</div>
+      <div class="gpsRow">
+        <div>
+          <div class="g1" id="gpsLbl">לא נקלט</div>
+          <div class="g2" id="gpsAcc"></div>
+        </div>
+        <button class="btn primary" id="gpsBtn">קלוט GPS</button>
+      </div>
+      <div class="small" style="margin-top:8px">אם אין קליטה – תמשיך עם מיקום טקסט.</div>
+    </div>
+
+    <div class="section">
+      <div class="lbl">מאפיינים (מופרד בפסיקים)</div>
+      <input class="txt" id="fTraits" placeholder="ריח חזק, גבעול ארוך, עמיד חום…">
+    </div>
+
+    <div class="section">
+      <div class="lbl">הערות</div>
+      <textarea class="area" id="fNotes" placeholder="תצפיות, השוואות, החלטות לשמירה…"></textarea>
+    </div>
+
+    <div class="section grid2">
+      <button class="btn primary" id="btnSave">✅ שמור</button>
+      <button class="btn danger" id="btnDelete" style="display:none">🗑 מחיקה</button>
+    </div>
+
+    <div class="small" style="margin-top:10px">גיבוי/ייבוא נמצאים למעלה: 📦 / 📥</div>
+  </div>
+</div>
+
+<!-- DETAIL -->
+<div class="overlay" id="det" aria-hidden="true">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="hdr2">
+      <div>
+        <div class="ttl" id="dTitle">פרטי זן</div>
+        <div class="sub" id="dSub"></div>
+      </div>
+      <button class="btn small" id="dClose">סגור ✕</button>
+    </div>
+    <div id="detBody"></div>
+  </div>
+</div>
+
+<!-- IMPORT (hidden) -->
+<input type="file" id="importIn" accept="application/json" style="display:none">
+
+<script>
+/* ---------- Storage ---------- */
+const STORE_KEY = 'variety_pro_v1';
+function loadDB(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return [];
+    return JSON.parse(raw) || [];
+  }catch(e){ return []; }
+}
+function saveDB(db){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(db)); }catch(e){}
+}
+
+/* ---------- Helpers ---------- */
+const TYPES = {
+  ranunculus:{label:'נוריות', icon:'🌺'},
+  sweetpea:{label:'Sweet Pea', icon:'🌸'},
+  calendula:{label:'Calendula', icon:'🌼'},
+  other:{label:'אחר', icon:'🌿'}
+};
+const STATUS = {
+  flowering:{label:'בפריחה', icon:'🟢', cls:'b-flowering'},
+  seeding:{label:'בזרעים', icon:'🟡', cls:'b-seeding'},
+  dormant:{label:'רדום', icon:'⚪', cls:'b-dormant'},
+  selected:{label:'נבחר', icon:'⭐', cls:'b-selected'}
+};
+const COLORS = ['#ff3b6b','#ff6b9d','#ff8c42','#ffd700','#ffffff','#f5cba7','#d7bde2','#9b59b6','#2ecc71','#1abc9c','#48b4ff','#5d4037'];
+
+const $ = (id)=>document.getElementById(id);
+const today = ()=> new Date().toISOString().slice(0,10);
+function seasonOf(d=new Date()){
+  const y=d.getFullYear();
+  const m=d.getMonth()+1;
+  return m>=9 ? `${y}-${y+1}` : `${y-1}-${y}`;
+}
+function toast(msg){
+  const t=$('toast');
+  t.textContent=msg;
+  t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'), 2200);
+}
+function clamp(n,a,b){return Math.max(a, Math.min(b,n));}
+function uid(){ return Date.now() + Math.floor(Math.random()*1000); }
+
+/* ---------- Image compression ---------- */
+async function fileToDataURL(file, maxSide=1280, quality=0.82){
+  const data = await file.arrayBuffer();
+  const blob = new Blob([data], {type:file.type});
+  const img = await createImageBitmap(blob);
+  const w = img.width, h = img.height;
+  const scale = Math.min(1, maxSide / Math.max(w,h));
+  const nw = Math.round(w*scale), nh = Math.round(h*scale);
+  const canvas = document.createElement('canvas');
+  canvas.width = nw; canvas.height = nh;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0,0,nw,nh);
+  return canvas.toDataURL('image/jpeg', quality);
+}
+
+/* ---------- App state ---------- */
+let DB = loadDB();
+let filt = 'all';
+let sortMode = 'updated_desc'; // updated_desc, updated_asc, rating_desc, name_asc
+let editId = null;
+let draftPhotos = [];
+let draftGPS = null;
+let draftColor = COLORS[1];
+let draftRating = 0;
+let detIdx = 0;
+
+/* ---------- UI init ---------- */
+function renderKpis(){
+  const total = DB.length;
+  const sel = DB.filter(v=>v.status==='selected').length;
+  const flow = DB.filter(v=>v.status==='flowering').length;
+  const seed = DB.filter(v=>v.status==='seeding').length;
+  const gps = DB.filter(v=>v.gps).length;
+  const photos = DB.filter(v=>v.photos?.length).length;
+
+  const k = [
+    ['זנים', total],
+    ['נבחרו', sel],
+    ['פריחה', flow],
+    ['זרעים', seed],
+    ['GPS', gps],
+    ['תמונות', photos]
+  ];
+  $('kpis').innerHTML = k.map(([l,n])=>`
+    <div class="kpi"><div class="n">${n}</div><div class="l">${l}</div></div>
+  `).join('');
+}
+
+function renderFilters(){
+  const items = [
+    ['all','הכל 🌿'],
+    ['ranunculus','נוריות 🌺'],
+    ['sweetpea','Sweet Pea 🌸'],
+    ['calendula','Calendula 🌼'],
+    ['selected','⭐ נבחרו'],
+    ['flowering','🟢 פריחה'],
+    ['seeding','🟡 זרעים']
+  ];
+  $('filters').innerHTML = items.map(([k,label])=>`
+    <div class="pill ${filt===k?'on':''}" data-f="${k}">${label}</div>
+  `).join('');
+  document.querySelectorAll('.pill').forEach(p=>{
+    p.onclick = ()=>{ filt = p.dataset.f; renderAll(); };
+  });
+}
+
+function getFiltered(){
+  const q = ($('q').value||'').trim().toLowerCase();
+  let arr = DB.slice();
+
+  // filter
+  arr = arr.filter(v=>{
+    const okType = (filt==='all') ? true :
+      (filt==='selected') ? v.status==='selected' :
+      (filt==='flowering') ? v.status==='flowering' :
+      (filt==='seeding') ? v.status==='seeding' :
+      v.type===filt;
+
+    const blob = `${v.name||''} ${(v.locText||'')} ${(v.traits||'')} ${(v.notes||'')}`.toLowerCase();
+    const okQ = !q || blob.includes(q);
+    return okType && okQ;
+  });
+
+  // sort
+  arr.sort((a,b)=>{
+    if(sortMode==='updated_desc') return (b.updated||'').localeCompare(a.updated||'');
+    if(sortMode==='updated_asc') return (a.updated||'').localeCompare(b.updated||'');
+    if(sortMode==='rating_desc') return (b.rating||0)-(a.rating||0);
+    if(sortMode==='name_asc') return (a.name||'').localeCompare(b.name||'');
+    return 0;
+  });
+
+  return arr;
+}
+
+function stars(n){
+  const r = clamp(n||0,0,5);
+  return '★'.repeat(r) + '☆'.repeat(5-r);
+}
+
+function badgeFor(status){
+  const s = STATUS[status] || STATUS.flowering;
+  return `<div class="badge ${s.cls}">${s.icon} ${s.label}</div>`;
+}
+
+function renderList(){
+  const data = getFiltered();
+  const list = $('list');
+  const empty = $('empty');
+
+  if(!data.length){
+    list.innerHTML = '';
+    empty.style.display='block';
+    empty.className = 'empty';
+    empty.innerHTML = `
+      <div class="ic">${DB.length? '🔍':'🌱'}</div>
+      <div class="h">${DB.length? 'לא נמצאו תוצאות':'אין זנים עדיין'}</div>
+      <div class="p">${DB.length? 'נסה לשנות סינון או חיפוש.':'לחץ על ＋ כדי להוסיף זן ראשון.'}</div>
+    `;
+    return;
+  }
+  empty.style.display='none';
+
+  list.innerHTML = data.map(v=>{
+    const t = TYPES[v.type] || TYPES.other;
+    const s = STATUS[v.status] || STATUS.flowering;
+    const has = v.photos?.length;
+    const hero = has
+      ? `<div class="hero" data-open="${v.id}"><img src="${v.photos[0]}">${v.photos.length>1?`<div class="count">📷 ${v.photos.length}</div>`:''}${badgeFor(v.status)}</div>`
+      : `<div class="hero" data-open="${v.id}" style="background:linear-gradient(135deg, ${v.color||'#2ee59d'}33, rgba(0,0,0,.12)); font-size:58px">${t.icon}${badgeFor(v.status)}</div>`;
+
+    const loc = v.gps ? `📡 ${v.locText || (v.gps.lat+', '+v.gps.lng)}` : (v.locText ? `📍 ${v.locText}` : '📍 ללא מיקום');
+    return `
+      <div class="card">
+        ${hero}
+        <div class="body">
+          <div class="name">${escapeHtml(v.name||'') || 'ללא שם'}</div>
+          <div class="meta">
+            <span class="chip">${t.icon} ${t.label}</span>
+            <span class="chip"><span class="dot" style="background:${v.color||'#ffffff'}"></span>${v.color||''}</span>
+            <span class="chip"><span class="stars">${stars(v.rating||0)}</span></span>
+            <span class="chip">${loc}</span>
+            <span class="chip">🕒 ${v.updated||v.created||'—'}</span>
+          </div>
+          ${v.traits? `<div class="small" style="margin-top:8px">🏷 ${escapeHtml(v.traits)}</div>`:''}
+        </div>
+        <div class="actions2">
+          <button class="btn small" data-det="${v.id}">פרטים</button>
+          <button class="btn small primary" data-edit="${v.id}">עריכה</button>
+          <button class="btn small" data-sel="${v.id}">${v.status==='selected'?'✅':'⭐'}</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // bind
+  document.querySelectorAll('[data-open]').forEach(el=>el.onclick=()=>openDetail(+el.dataset.open));
+  document.querySelectorAll('[data-det]').forEach(el=>el.onclick=()=>openDetail(+el.dataset.det));
+  document.querySelectorAll('[data-edit]').forEach(el=>el.onclick=()=>openEdit(+el.dataset.edit));
+  document.querySelectorAll('[data-sel]').forEach(el=>el.onclick=()=>toggleSelected(+el.dataset.sel));
+}
+
+function groupByLocation(){
+  // Key: locText if exists else gps coords else "ללא מיקום"
+  const map = {};
+  for(const v of DB){
+    const k = v.locText?.trim() ? v.locText.trim() : (v.gps ? `${v.gps.lat}, ${v.gps.lng}` : 'ללא מיקום');
+    (map[k] ||= []).push(v);
+  }
+  return map;
+}
+
+function renderField(){
+  const field = $('field');
+  if(!DB.length){
+    field.innerHTML = `<div class="empty"><div class="ic">🗺</div><div class="h">אין נתונים</div><div class="p">כשתוסיף זנים עם מיקום, הם יופיעו כאן.</div></div>`;
+    return;
+  }
+  const grouped = groupByLocation();
+  field.innerHTML = Object.entries(grouped).map(([loc,vs])=>{
+    const anyGPS = vs.some(v=>v.gps);
+    const link = anyGPS ? (()=>{
+      const g = vs.find(v=>v.gps)?.gps;
+      return `<a class="mapLink" target="_blank" rel="noopener" href="https://maps.google.com/?q=${g.lat},${g.lng}">🗺 פתח מפה · ${g.lat}, ${g.lng}</a>`;
+    })() : '';
+    return `
+      <div class="card2">
+        <div class="lineitem"><span class="key">📍 מיקום</span><span class="val">${escapeHtml(loc)}</span></div>
+        ${link}
+        <div class="tl">
+          ${vs.sort((a,b)=>(b.updated||'').localeCompare(a.updated||'')).map(v=>`
+            <div class="tli" style="cursor:pointer" onclick="openDetail(${v.id})">
+              <div class="tld"></div>
+              <div style="min-width:0">
+                <div class="tlt" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(v.name||'')}</div>
+                <div class="tls">${(STATUS[v.status]||STATUS.flowering).icon} ${(STATUS[v.status]||STATUS.flowering).label} · ${'★'.repeat(v.rating||0)} · ${TYPES[v.type]?.icon||'🌿'}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderSeason(){
+  const season = $('season');
+  const current = seasonOf();
+  $('seasonTitle').textContent = `סיכום לעונה: ${current}`;
+  if(!DB.length){
+    season.innerHTML = `<div class="empty"><div class="ic">📅</div><div class="h">אין נתונים</div></div>`;
+    return;
+  }
+  const byType = Object.keys(TYPES).map(k=>[k, DB.filter(v=>v.type===k)]).filter(([_,a])=>a.length);
+  const avg = DB.length ? (DB.reduce((a,v)=>a+(v.rating||0),0)/DB.length).toFixed(1) : '—';
+  season.innerHTML = `
+    <div class="card2">
+      <div class="h3">📊 סיכום</div>
+      ${line('סה״כ זנים', DB.length)}
+      ${line('נבחרו', DB.filter(v=>v.status==='selected').length)}
+      ${line('בפריחה', DB.filter(v=>v.status==='flowering').length)}
+      ${line('בזרעים', DB.filter(v=>v.status==='seeding').length)}
+      ${line('עם GPS', DB.filter(v=>v.gps).length)}
+      ${line('עם תמונות', DB.filter(v=>v.photos?.length).length)}
+      ${line('דירוג ממוצע', avg + ' ★')}
+    </div>
+    ${byType.map(([t,arr])=>{
+      const sel = arr.filter(v=>v.status==='selected').length;
+      const pct = Math.round(sel/arr.length*100);
+      return `
+        <div class="card2" style="cursor:pointer" onclick="filt='${t}'; switchTab('list'); renderAll(); toast('סינון: ${TYPES[t].label}')">
+          <div class="h3">${TYPES[t].icon} ${TYPES[t].label}</div>
+          ${line('כמות', arr.length)}
+          ${line('נבחרו', `${sel} (${pct}%)`)}
+          ${line('דירוג ממוצע', (arr.reduce((a,v)=>a+(v.rating||0),0)/arr.length).toFixed(1)+' ★')}
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+function line(k,v){ return `<div class="lineitem"><span class="key">${k}</span><span class="val">${v}</span></div>`; }
+
+function renderAll(){
+  renderKpis();
+  renderFilters();
+  renderList();
+  renderField();
+  renderSeason();
+}
+
+/* ---------- Tabs ---------- */
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t.dataset.tab===tab));
+  document.querySelectorAll('.navit').forEach(n=>n.classList.toggle('on', n.dataset.tab===tab));
+  $('view-list').style.display = tab==='list' ? 'block':'none';
+  $('view-field').style.display = tab==='field' ? 'block':'none';
+  $('view-season').style.display = tab==='season' ? 'block':'none';
+}
+document.querySelectorAll('[data-tab]').forEach(el=>{
+  el.onclick = ()=> switchTab(el.dataset.tab);
+});
+
+/* ---------- Modal open/close ---------- */
+function openModal(){
+  $('modal').classList.add('on'); $('modal').setAttribute('aria-hidden','false');
+}
+function closeModal(){
+  $('modal').classList.remove('on'); $('modal').setAttribute('aria-hidden','true');
+}
+$('mClose').onclick = closeModal;
+$('modal').onclick = (e)=>{ if(e.target===$('modal')) closeModal(); };
+
+function openAdd(){
+  editId = null;
+  draftPhotos = [];
+  draftGPS = null;
+  draftColor = COLORS[1];
+  draftRating = 0;
+
+  $('mTitle').textContent = 'הוספת זן';
+  $('btnDelete').style.display='none';
+  $('fName').value='';
+  $('fType').value='ranunculus';
+  $('fStatus').value='flowering';
+  $('fLoc').value='';
+  $('fTraits').value='';
+  $('fNotes').value='';
+  renderDraft();
+  openModal();
+}
+$('fab').onclick = openAdd;
+
+/* ---------- Draft render ---------- */
+function renderColors(){
+  $('colors').innerHTML = COLORS.map(c=>`
+    <div class="csw ${draftColor===c?'on':''}" style="background:${c}" data-c="${c}"></div>
+  `).join('');
+  document.querySelectorAll('.csw').forEach(el=>{
+    el.onclick = ()=>{ draftColor = el.dataset.c; renderColors(); };
+  });
+}
+function renderRating(){
+  $('rating').innerHTML = [1,2,3,4,5].map(i=>`
+    <span class="rstar ${i<=draftRating?'on':''}" data-r="${i}">★</span>
+  `).join('');
+  document.querySelectorAll('.rstar').forEach(el=>{
+    el.onclick = ()=>{ draftRating = +el.dataset.r; renderRating(); };
+  });
+}
+function renderPGrid(){
+  $('pgrid').innerHTML = draftPhotos.map((p,i)=>`
+    <div class="pcell"><img src="${p}"><button class="pdel" title="מחיקה" onclick="removePhoto(${i})">✕</button></div>
+  `).join('');
+}
+window.removePhoto = (i)=>{ draftPhotos.splice(i,1); renderPGrid(); };
+function renderGPS(){
+  if(draftGPS){
+    $('gpsLbl').textContent = `${draftGPS.lat}, ${draftGPS.lng}`;
+    $('gpsAcc').textContent = `✅ דיוק: ${draftGPS.acc}מ׳`;
+    $('gpsAcc').className = 'g2 good';
+    $('gpsBtn').textContent = 'קלוט שוב';
+  }else{
+    $('gpsLbl').textContent = 'לא נקלט';
+    $('gpsAcc').textContent = '';
+    $('gpsAcc').className = 'g2';
+    $('gpsBtn').textContent = 'קלוט GPS';
+  }
+}
+function renderDraft(){
+  renderColors();
+  renderRating();
+  renderPGrid();
+  renderGPS();
+}
+
+/* ---------- Photos ---------- */
+$('photoPick').onclick = ()=> $('photoIn').click();
+$('photoIn').onchange = async (e)=>{
+  const files = Array.from(e.target.files||[]);
+  if(!files.length) return;
+  const free = 8 - draftPhotos.length;
+  if(free<=0){ toast('מקסימום 8 תמונות'); return; }
+  const use = files.slice(0, free);
+
+  toast('מעבד תמונות…');
+  for(const f of use){
+    try{
+      const dataUrl = await fileToDataURL(f, 1280, 0.82);
+      draftPhotos.push(dataUrl);
+    }catch(err){
+      // fallback
+      const r = new FileReader();
+      await new Promise(res=>{ r.onload=()=>{draftPhotos.push(r.result); res();}; r.readAsDataURL(f); });
+    }
+  }
+  $('photoIn').value='';
+  renderPGrid();
+  toast('✅ תמונות נוספו');
+};
+
+/* ---------- GPS ---------- */
+$('gpsBtn').onclick = ()=>{
+  if(!navigator.geolocation){
+    toast('GPS לא נתמך במכשיר');
+    return;
+  }
+  $('gpsBtn').textContent='⏳...';
+  navigator.geolocation.getCurrentPosition(
+    (pos)=>{
+      draftGPS = {
+        lat: pos.coords.latitude.toFixed(6),
+        lng: pos.coords.longitude.toFixed(6),
+        acc: Math.round(pos.coords.accuracy)
+      };
+      renderGPS();
+      toast('📍 GPS נקלט!');
+    },
+    (err)=>{
+      $('gpsBtn').textContent='קלוט GPS';
+      toast('⚠️ אין הרשאת מיקום / אין קליטה');
+    },
+    {enableHighAccuracy:true, timeout:15000, maximumAge:0}
+  );
+};
+
+/* ---------- CRUD ---------- */
+function addLog(v, note){
+  v.log ||= [];
+  v.log.push({d: today(), n: note});
+}
+function upsert(){
+  const name = $('fName').value.trim();
+  if(!name){ toast('חסר שם'); return; }
+
+  const now = today();
+  const payload = {
+    name,
+    type: $('fType').value,
+    status: $('fStatus').value,
+    color: draftColor,
+    rating: draftRating,
+    locText: $('fLoc').value.trim(),
+    gps: draftGPS,
+    traits: $('fTraits').value.trim(),
+    notes: $('fNotes').value.trim(),
+    photos: draftPhotos.slice(0,8),
+    updated: now
+  };
+
+  if(editId){
+    const idx = DB.findIndex(v=>v.id===editId);
+    if(idx>=0){
+      const old = DB[idx];
+      DB[idx] = {...old, ...payload};
+      if(old.status !== payload.status) addLog(DB[idx], `סטטוס → ${(STATUS[payload.status]||STATUS.flowering).label}`);
+      if(payload.gps && !old.gps) addLog(DB[idx], `📍 GPS: ${payload.gps.lat}, ${payload.gps.lng}`);
+      addLog(DB[idx], 'עודכן ✏️');
+      toast('✅ עודכן');
+    }
+  }else{
+    const v = {
+      id: uid(),
+      created: now,
+      season: seasonOf(),
+      log: [{d: now, n:'תועד לראשונה 🌱'}],
+      ...payload
+    };
+    if(v.gps) addLog(v, `📍 GPS: ${v.gps.lat}, ${v.gps.lng}`);
+    DB.unshift(v);
+    toast('✅ נוסף');
+  }
+
+  saveDB(DB);
+  closeModal();
+  renderAll();
+}
+$('btnSave').onclick = upsert;
+
+function openEdit(id){
+  const v = DB.find(x=>x.id===id);
+  if(!v) return;
+
+  editId = id;
+  draftPhotos = (v.photos||[]).slice();
+  draftGPS = v.gps || null;
+  draftColor = v.color || COLORS[1];
+  draftRating = v.rating || 0;
+
+  $('mTitle').textContent = 'עריכת זן';
+  $('btnDelete').style.display='inline-flex';
+
+  $('fName').value = v.name||'';
+  $('fType').value = v.type||'other';
+  $('fStatus').value = v.status||'flowering';
+  $('fLoc').value = v.locText||'';
+  $('fTraits').value = v.traits||'';
+  $('fNotes').value = v.notes||'';
+
+  renderDraft();
+  openModal();
+}
+
+$('btnDelete').onclick = ()=>{
+  if(!editId) return;
+  if(!confirm('למחוק את הזן?')) return;
+  DB = DB.filter(v=>v.id!==editId);
+  saveDB(DB);
+  toast('🗑 נמחק');
+  closeModal();
+  renderAll();
+};
+
+function toggleSelected(id){
+  const v = DB.find(x=>x.id===id);
+  if(!v) return;
+  const was = v.status==='selected';
+  v.status = was ? 'flowering' : 'selected';
+  v.updated = today();
+  addLog(v, was ? 'הוסר מנבחרים' : '⭐ נבחר לשמירה');
+  saveDB(DB);
+  renderAll();
+  toast(was ? '↩️ הוסר' : '⭐ נבחר');
+}
+
+/* ---------- Detail ---------- */
+function openDetail(id){
+  const v = DB.find(x=>x.id===id);
+  if(!v) return;
+  detIdx = 0;
+  $('dTitle').textContent = v.name || 'פרטי זן';
+  $('dSub').textContent = `${(TYPES[v.type]||TYPES.other).icon} ${(TYPES[v.type]||TYPES.other).label} · ${(STATUS[v.status]||STATUS.flowering).icon} ${(STATUS[v.status]||STATUS.flowering).label}`;
+
+  const hero = v.photos?.length ? `
+    <div class="heroBig" onclick="nextPhoto(${v.id})" id="hero-${v.id}">
+      <img id="heroimg-${v.id}" src="${v.photos[0]}">
+      ${v.photos.length>1 ? `<div class="dots">${v.photos.map((_,i)=>`<div class="dot2 ${i===0?'on':''}"></div>`).join('')}</div>`:''}
+    </div>
+  ` : `
+    <div class="heroBig" style="display:flex;align-items:center;justify-content:center;font-size:78px;background:linear-gradient(135deg, ${v.color||'#2ee59d'}33, rgba(0,0,0,.12))">
+      ${(TYPES[v.type]||TYPES.other).icon}
+    </div>
+  `;
+
+  const maps = v.gps ? `
+    <a class="mapLink" target="_blank" rel="noopener" href="https://maps.google.com/?q=${v.gps.lat},${v.gps.lng}">🗺 פתח ב‑Google Maps · ${v.gps.lat}, ${v.gps.lng}</a>
+  ` : '';
+
+  const traits = v.traits ? `
+    <div class="card2"><div class="h3">🏷 מאפיינים</div>
+      <div class="small" style="line-height:1.8">${escapeHtml(v.traits)}</div>
+    </div>
+  ` : '';
+
+  const notes = v.notes ? `
+    <div class="card2"><div class="h3">📝 הערות</div>
+      <div class="small" style="line-height:1.8">${escapeHtml(v.notes)}</div>
+    </div>
+  ` : '';
+
+  const log = (v.log||[]).slice().reverse().slice(0,20).map(l=>`
+    <div class="tli">
+      <div class="tld"></div>
+      <div>
+        <div class="tlt">${escapeHtml(l.n)}</div>
+        <div class="tls">${l.d}</div>
+      </div>
+    </div>
+  `).join('');
+
+  $('detBody').innerHTML = `
+    ${hero}
+    ${maps}
+    <div class="card2">
+      <div class="h3">פרטים</div>
+      ${line('סטטוס', `${(STATUS[v.status]||STATUS.flowering).icon} ${(STATUS[v.status]||STATUS.flowering).label}`)}
+      ${line('דירוג', `<span class="stars">${stars(v.rating||0)}</span>`)}
+      ${line('צבע', `<span class="dot" style="background:${v.color||'#fff'}"></span> ${v.color||'—'}`)}
+      ${line('מיקום', escapeHtml(v.locText||'—'))}
+      ${line('GPS', v.gps ? `${v.gps.lat}, ${v.gps.lng} (±${v.gps.acc}מ׳)` : '—')}
+      ${line('עודכן', v.updated||'—')}
+      ${line('נוצר', v.created||'—')}
+      ${line('תמונות', (v.photos?.length||0) + ' 📷')}
+      ${line('עונה', v.season||'—')}
+    </div>
+    ${traits}
+    ${notes}
+    ${log ? `<div class="card2"><div class="h3">היסטוריה</div><div class="tl">${log}</div></div>`:''}
+    <div class="grid2" style="margin-top:12px">
+      <button class="btn primary" onclick="openEdit(${v.id}); closeDetail()">✏️ עריכה</button>
+      <button class="btn" onclick="toggleSelected(${v.id})">${v.status==='selected'?'✅':'⭐'} בחירה</button>
+    </div>
+  `;
+
+  $('det').classList.add('on');
+  $('det').setAttribute('aria-hidden','false');
+}
+window.nextPhoto = (id)=>{
+  const v = DB.find(x=>x.id===id);
+  if(!v?.photos || v.photos.length<2) return;
+  detIdx = (detIdx + 1) % v.photos.length;
+  const img = document.getElementById(`heroimg-${id}`);
+  if(img) img.src = v.photos[detIdx];
+  const dots = document.querySelectorAll(`#hero-${id} .dot2`);
+  dots.forEach((d,i)=>d.classList.toggle('on', i===detIdx));
+};
+function closeDetail(){
+  $('det').classList.remove('on');
+  $('det').setAttribute('aria-hidden','true');
+}
+$('dClose').onclick = closeDetail;
+$('det').onclick = (e)=>{ if(e.target===$('det')) closeDetail(); };
+
+/* ---------- Backup / Import / Reset ---------- */
+function download(filename, text){
+  const blob = new Blob([text], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 800);
+}
+$('btnExport').onclick = ()=>{
+  const payload = {
+    app: 'Variety Pro',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    count: DB.length,
+    data: DB
+  };
+  download(`variety_pro_backup_${today()}.json`, JSON.stringify(payload, null, 2));
+  toast('📦 גיבוי ירד לקובץ');
+};
+
+$('btnImport').onclick = ()=> $('importIn').click();
+$('importIn').onchange = async (e)=>{
+  const f = e.target.files?.[0];
+  if(!f) return;
+  try{
+    const txt = await f.text();
+    const obj = JSON.parse(txt);
+    const incoming = Array.isArray(obj) ? obj : (obj.data || []);
+    if(!Array.isArray(incoming)) throw new Error('bad');
+    // Merge by id, prefer newer updated
+    const map = new Map(DB.map(v=>[v.id, v]));
+    let added=0, updated=0;
+    for(const v of incoming){
+      if(!v || !v.id) continue;
+      const cur = map.get(v.id);
+      if(!cur){ map.set(v.id, v); added++; }
+      else{
+        const nu = v.updated||'';
+        const cu = cur.updated||'';
+        if(nu && (!cu || nu>cu)){ map.set(v.id, {...cur, ...v}); updated++; }
+      }
+    }
+    DB = Array.from(map.values()).sort((a,b)=>(b.updated||'').localeCompare(a.updated||''));
+    saveDB(DB);
+    renderAll();
+    toast(`📥 ייבוא: +${added}, עודכנו ${updated}`);
+  }catch(err){
+    toast('⚠️ קובץ ייבוא לא תקין');
+  }finally{
+    $('importIn').value='';
+  }
+};
+
+$('btnReset').onclick = ()=>{
+  if(!confirm('לאפס את כל הנתונים מהמכשיר?')) return;
+  if(!confirm('בטוח? זה מוחק הכול.')) return;
+  DB = [];
+  saveDB(DB);
+  renderAll();
+  toast('🧨 אופס—אופס. התאפס.');
+};
+
+/* ---------- Sort ---------- */
+$('btnSort').onclick = ()=>{
+  const modes = ['updated_desc','updated_asc','rating_desc','name_asc'];
+  const labels = {
+    updated_desc:'עודכן: חדש→ישן',
+    updated_asc:'עודכן: ישן→חדש',
+    rating_desc:'דירוג: גבוה→נמוך',
+    name_asc:'שם: א→ת'
+  };
+  const i = modes.indexOf(sortMode);
+  sortMode = modes[(i+1)%modes.length];
+  toast('מיון: ' + labels[sortMode]);
+  renderList();
+};
+
+/* ---------- Security: escape HTML ---------- */
+function escapeHtml(str){
+  return (str||'').replace(/[&<>"']/g, (m)=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[m]));
+}
+
+/* ---------- Seed sample data (only if empty) ---------- */
+function seedIfEmpty(){
+  if(DB.length) return;
+  DB = [
+    {
+      id: uid(),
+      name: 'Yankel Dudel — שורה 4',
+      type: 'sweetpea',
+      status: 'selected',
+      color: '#ff3b6b',
+      rating: 5,
+      locText: 'גוש A · שורה 4 · עמדה 7',
+      gps: null,
+      traits: 'ריח חזק, גבעול ארוך, צבע נדיר',
+      notes: 'שמור לזרעים נקיים. לבדוק יציבות צבע בפריחה מסיבית.',
+      photos: [],
+      created: today(),
+      updated: today(),
+      season: seasonOf(),
+      log: [{d: today(), n:'תועד לראשונה 🌱'},{d: today(), n:'⭐ נבחר לשמירה'}]
+    },
+    {
+      id: uid(),
+      name: 'נורית ורודה עמוקה — R-007',
+      type: 'ranunculus',
+      status: 'flowering',
+      color: '#ff6b9d',
+      rating: 4,
+      locText: 'בריכה 2 · שורה 1',
+      gps: null,
+      traits: 'עלי כותרת כפולים',
+      notes: '',
+      photos: [],
+      created: today(),
+      updated: today(),
+      season: seasonOf(),
+      log: [{d: today(), n:'תועד לראשונה 🌱'}]
+    }
+  ];
+  saveDB(DB);
+}
+
+/* ---------- Boot ---------- */
+seedIfEmpty();
+renderAll();
+
+$('q').addEventListener('input', ()=>renderList());
+
+/* Close modal on ESC */
+window.addEventListener('keydown', (e)=>{
+  if(e.key==='Escape'){
+    if($('modal').classList.contains('on')) closeModal();
+    if($('det').classList.contains('on')) closeDetail();
+  }
+});
+
+/* PWA SW register */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', async ()=>{
+    try{
+      const reg = await navigator.serviceWorker.register('sw.js?v=1');
+      reg.update();
+    }catch(e){}
+  });
+}
+</script>
+</body>
+</html>
