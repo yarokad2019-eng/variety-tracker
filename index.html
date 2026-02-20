@@ -1073,7 +1073,8 @@ window.addEventListener('load', ()=>{
 });
 /* ---------- Cloud (Firestore) ---------- */
 
-let CLOUD = { uid:null, ready:false };
+window.CLOUD = window.CLOUD || { uid:null, ready:false };
+const CLOUD = window.CLOUD;
 
 async function cloudInit(){
   const { auth, onAuthStateChanged, signInAnonymously } = window.__fb;
