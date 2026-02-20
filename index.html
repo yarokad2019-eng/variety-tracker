@@ -1071,7 +1071,63 @@ window.addEventListener('load', ()=>{
   if(btn){ btn.addEventListener('click', ()=>{ if(!CLOUD.ready) return cloudInit(); cloudPush(); }); }
   cloudInit();
 });
-/* ---------- /Cloud Backup (Firebase) ---------- */
+/* ---------- Cloud (Firestore) ---------- */
+
+let CLOUD = { uid:null, ready:false };
+
+async function cloudInit(){
+  const { auth, onAuthStateChanged, signInAnonymously } = window.__fb;
+
+  onAuthStateChanged(auth, async (user)=>{
+    if(!user){
+      await signInAnonymously(auth);
+      return;
+    }
+    CLOUD.uid = user.uid;
+    CLOUD.ready = true;
+    setCloudStatus('🟢 מחובר לענן', '#16a34a');
+    await cloudPull();
+  });
+}
+
+async function cloudPush(){
+  if(!CLOUD.ready) return;
+
+  const { db, doc, setDoc, serverTimestamp } = window.__fb;
+
+  const ref = doc(
+    db,
+    `users/${CLOUD.uid}/apps/variety-tracker/state/main`
+  );
+
+  await setDoc(ref, {
+    data: DB,
+    updatedAt: serverTimestamp()
+  });
+
+  showToast('☁️ נשמר לענן');
+}
+
+async function cloudPull(){
+  if(!CLOUD.ready) return;
+
+  const { db, doc, getDoc } = window.__fb;
+
+  const ref = doc(
+    db,
+    `users/${CLOUD.uid}/apps/variety-tracker/state/main`
+  );
+
+  const snap = await getDoc(ref);
+
+  if(snap.exists()){
+    const cloudData = snap.data().data || [];
+    DB = cloudData;
+    await saveDB();
+    renderAll();
+    showToast('☁️ נטען מהענן');
+  }
+}
 
 </script>
 </body>
