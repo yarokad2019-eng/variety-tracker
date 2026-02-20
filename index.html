@@ -1070,6 +1070,71 @@ window.addEventListener('load', ()=>{
   if(btn){ btn.addEventListener('click', ()=>{ if(!CLOUD.ready) return cloudInit(); cloudPush(); }); }
   cloudInit();
 });
+  // ===== Firebase Full Backup =====
+
+async function firebaseBackupNow() {
+  try {
+    const user = window.__fb?.auth?.currentUser;
+    if (!user) return alert("לא מחובר");
+
+    const uid = user.uid;
+    const snap = await window.__fb.db.ref(`users/${uid}`).once("value");
+    const data = snap.val() || {};
+
+    await window.__fb.db
+      .ref(`users/${uid}/backups/seed-management`)
+      .push({
+        createdAt: Date.now(),
+        data
+      });
+
+    alert("✅ הגיבוי נשמר בענן");
+  } catch (e) {
+    console.error(e);
+    alert("❌ שגיאה בגיבוי");
+  }
+}
+
+async function firebaseRestorePicker() {
+  try {
+    const user = window.__fb?.auth?.currentUser;
+    if (!user) return alert("לא מחובר");
+
+    const uid = user.uid;
+
+    const snap = await window.__fb.db
+      .ref(`users/${uid}/backups/seed-management`)
+      .once("value");
+
+    const backups = snap.val();
+    if (!backups) return alert("אין גיבויים");
+
+    const list = Object.entries(backups)
+      .sort((a,b)=>b[1].createdAt - a[1].createdAt);
+
+    const menu = list.map((b,i)=>{
+      const d = new Date(b[1].createdAt).toLocaleString();
+      return `${i+1}) ${d}`;
+    }).join("\n");
+
+    const choice = prompt("בחר מספר גיבוי לשחזור:\n\n"+menu);
+    const idx = parseInt(choice)-1;
+    if (isNaN(idx) || idx<0 || idx>=list.length) return;
+
+    if (!confirm("השחזור יחליף את כל הנתונים. להמשיך?")) return;
+
+    await window.__fb.db
+      .ref(`users/${uid}`)
+      .set(list[idx][1].data);
+
+    alert("✅ שחזור הושלם, מרענן...");
+    location.reload();
+
+  } catch (e) {
+    console.error(e);
+    alert("❌ שגיאה בשחזור");
+  }
+}
 /* ---------- /Cloud Backup (Firebase) ---------- */
 
 </script>
