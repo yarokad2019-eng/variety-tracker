@@ -1,0 +1,3158 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת ניהול גידול זרעים מקצועית | Seed Growing Management Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Heebo:wght@300;400;600;700&family=Secular+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d5016;
+            --primary-light: #4a7c2a;
+            --primary-dark: #1a3309;
+            --secondary: #d4a574;
+            --accent: #e8b86d;
+            --success: #5cb85c;
+            --warning: #f0ad4e;
+            --danger: #d9534f;
+            --info: #5bc0de;
+            --bg-main: #fafaf8;
+            --bg-card: #ffffff;
+            --text-primary: #2c3e21;
+            --text-secondary: #5a6c5a;
+            --text-muted: #8a9a8a;
+            --border: #d8e5d0;
+            --shadow-sm: 0 2px 8px rgba(45, 80, 22, 0.08);
+            --shadow-md: 0 4px 16px rgba(45, 80, 22, 0.12);
+            --shadow-lg: 0 8px 32px rgba(45, 80, 22, 0.16);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Assistant', 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #fafaf8 0%, #f0f4ed 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2rem 2rem 3rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-family: 'Secular One', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* Navigation Tabs */
+        .tabs {
+            max-width: 1400px;
+            margin: -2rem auto 0;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.75rem;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 16px 16px 0 0;
+            box-shadow: var(--shadow-md);
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem 1.25rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-family: 'Assistant', sans-serif;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            background: var(--bg-main);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.875rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Assistant', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--bg-main);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(45, 80, 22, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Assistant', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c9302c;
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #46b8da;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-main);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Action Buttons in Table */
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        /* Filter Section */
+        .filters {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-primary {
+            background: #e7f3e7;
+            color: var(--primary-dark);
+        }
+
+        /* Calculated Field */
+        .calculated-field {
+            background: #e7f5e7;
+            border: 2px dashed var(--primary-light);
+            padding: 0.875rem;
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+
+        /* Export Button */
+        .export-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+            gap: 0.5rem;
+        }
+
+        /* Season Selector */
+        .season-selector {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--border);
+        }
+
+        .season-selector h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .season-buttons {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .season-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border);
+            background: white;
+            color: var(--text-primary);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .season-btn:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .season-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Activity Type Badges */
+        .activity-planting { background: #d4edda; color: #155724; }
+        .activity-irrigation { background: #d1ecf1; color: #0c5460; }
+        .activity-spraying { background: #fff3cd; color: #856404; }
+        .activity-fertilizing { background: #f8d7da; color: #721c24; }
+        .activity-weeding { background: #e2e3e5; color: #383d41; }
+        .activity-harvest { background: #ffe8cc; color: #856404; }
+        .activity-cleaning { background: #e7f3e7; color: #2d5016; }
+        .activity-other { background: #e7e7e7; color: #495057; }
+
+        /* Timeline view for journal */
+        .timeline-entry {
+            position: relative;
+            padding-right: 2rem;
+            padding-bottom: 1.5rem;
+            border-right: 3px solid var(--border);
+        }
+
+        .timeline-entry:last-child {
+            border-right: none;
+        }
+
+        .timeline-entry::before {
+            content: '';
+            position: absolute;
+            right: -0.625rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--border);
+        }
+
+        .timeline-date {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Quick stats in journal */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-stat {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .quick-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .quick-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem 1rem 2rem;
+            }
+
+            .logo {
+                font-size: 1.75rem;
+            }
+
+            .tabs {
+                padding: 0 1rem;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .season-buttons {
+                flex-direction: column;
+            }
+        }
+    
+        /* ===== Crop-based background colors ===== */
+        body.crop-all { background: #f6faf7; }
+        body.crop-sweet-pea { background: #f3f7ff; }
+        body.crop-calendula { background: #fff7e6; }
+        body.crop-other { background: #f7f7f7; }
+        body { transition: background-color .25s ease; }
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 class="logo">
+                        <span class="logo-icon">🌱</span>
+                        מערכת ניהול גידול זרעים מקצועית
+                    </h1>
+                    <p class="subtitle">ניהול מלא: בדיקות נביטה | תכנון גידול | יומן עבודה שוטפת | דוחות וסטטיסטיקות</p>
+                </div>
+                <div id="authContainer">
+                    <button id="loginBtn" class="btn btn-secondary" style="display: none;">
+                        🔐 התחבר עם Google
+                    </button>
+                    <div id="userInfo" style="display: none; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.2); padding: 0.75rem 1.25rem; border-radius: 12px;">
+                            <img id="userPhoto" src="" alt="" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">
+                            <div>
+                                <div id="userName" style="font-weight: 600; font-size: 1rem;"></div>
+                                <div style="font-size: 0.85rem; opacity: 0.9;">
+                                    <span id="syncStatus">🔄 מסנכרן...</span>
+                                </div>
+                            </div>
+                            <button id="logoutBtn" class="btn btn-danger btn-small">
+                                🚪 התנתק
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="switchTab('journal')">
+                📅 יומן עבודה
+            </button>
+            <button class="tab-button" onclick="switchTab('germination')">
+                🔬 בדיקות נביטה
+            </button>
+            <button class="tab-button" onclick="switchTab('crop-plan')">
+                📊 תכנון גידול
+            </button>
+            <button class="tab-button" onclick="switchTab('reports')">
+                📈 דוחות וסטטיסטיקות
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Work Journal Tab -->
+        <div id="journal" class="tab-content active">
+            <!-- Season Selector -->
+            <div class="season-selector">
+                <h3>🗓️ בחר עונה</h3>
+                <div class="season-buttons" id="seasonButtons">
+                    <!-- Will be populated by JS -->
+                </div>
+                <button onclick="createNewSeason()" class="btn btn-primary" style="margin-top: 1rem;">
+                    ➕ צור עונה חדשה
+                </button>
+            </div>
+
+            <div class="quick-stats" id="journalQuickStats">
+                <div class="quick-stat">
+                    <div class="quick-stat-value" id="stat_journal_total">0</div>
+                    <div class="quick-stat-label">סך פעולות</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value" id="stat_journal_days">0</div>
+                    <div class="quick-stat-label">ימי עבודה</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value" id="stat_last_activity">-</div>
+                    <div class="quick-stat-label">פעולה אחרונה</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 class="card-title" style="margin: 0;">➕ רישום פעולה חדשה</h2>
+                    <div>
+                        <label for="importJournalFile" class="btn btn-info btn-small" style="cursor: pointer; margin: 0;">
+                            📤 ייבא מאקסל
+                        </label>
+                        <input type="file" id="importJournalFile" accept=".xlsx,.xls" style="display: none;" onchange="importJournalFromExcel(event)">
+                    </div>
+                </div>
+                <form id="journalForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>תאריך *</label>
+                            <input type="date" id="journal_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>סוג פעולה *</label>
+                            <select id="journal_activity_type" required>
+                                <option value="">-- בחר סוג פעולה --</option>
+                                <option value="שתילה">🌱 שתילה</option>
+                                <option value="השקיה">💧 השקיה</option>
+                                <option value="ריסוס">🧪 ריסוס</option>
+                                <option value="דישון">🌾 דישון</option>
+                                <option value="עישוב">🪴 עישוב</option>
+                                <option value="קטיף">✂️ קטיף</option>
+                                <option value="ניקוי">🧹 ניקוי</option>
+                                <option value="הכנה">🔧 הכנה</option>
+                                <option value="מעקב">👁️ מעקב</option>
+                                <option value="אחר">📝 אחר</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>פרטי הפעולה *</label>
+                            <input type="text" id="journal_action" placeholder="לדוגמה: ריסוס רונסטאר" required>
+                        </div>
+                        <div class="form-group">
+                            <label>כמויות / שעות</label>
+                            <input type="text" id="journal_quantity" placeholder="לדוגמה: 400 סמ״ק לדונם">
+                        </div>
+                        <div class="form-group">
+                            <label>השקיה ודישון (EC / כמות)</label>
+                            <input type="text" id="journal_irrigation" placeholder="לדוגמה: EC 6.5-7.2 או 30 קוב">
+                        </div>
+                        <div class="form-group">
+                            <label>זן / חלקה</label>
+                            <input type="text" id="journal_variety" placeholder="לדוגמה: צהוב, חלקה 33">
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>הערות</label>
+                            <textarea id="journal_notes" rows="3" placeholder="הערות נוספות..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">💾 שמור פעולה</button>
+                        <button type="reset" class="btn btn-secondary">🔄 נקה טופס</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="export-section">
+                    <button onclick="exportJournalToExcel()" class="btn btn-secondary btn-small">
+                        📥 ייצא לאקסל
+                    </button>
+                </div>
+                <h2 class="card-title">📋 יומן פעולות - <span id="currentSeasonDisplay">כל העונות</span></h2>
+                
+                <div class="filters">
+                    <div class="filter-grid">
+                        <div class="form-group">
+                            <label>סינון לפי סוג פעולה</label>
+                            <select id="filter_activity_type">
+                                <option value="">כל הפעולות</option>
+                                <option value="שתילה">🌱 שתילה</option>
+                                <option value="השקיה">💧 השקיה</option>
+                                <option value="ריסוס">🧪 ריסוס</option>
+                                <option value="דישון">🌾 דישון</option>
+                                <option value="עישוב">🪴 עישוב</option>
+                                <option value="קטיף">✂️ קטיף</option>
+                                <option value="ניקוי">🧹 ניקוי</option>
+                                <option value="הכנה">🔧 הכנה</option>
+                                <option value="מעקב">👁️ מעקב</option>
+                                <option value="אחר">📝 אחר</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>סינון לפי זן/חלקה</label>
+                            <input type="text" id="filter_journal_variety" placeholder="הקלד זן או חלקה...">
+                        </div>
+                        <div class="form-group">
+                            <button onclick="filterJournal()" class="btn btn-primary" style="width: 100%">
+                                🔍 סנן
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container" id="journalTableContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <p>אין פעולות ביומן. התחל לרשום פעולות!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Germination Testing Tab -->
+        <div id="germination" class="tab-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 class="card-title" style="margin: 0;">➕ הוספת בדיקת נביטה חדשה</h2>
+                    <div>
+                        <label for="importGermFile" class="btn btn-info btn-small" style="cursor: pointer; margin: 0;">
+                            📤 ייבא מאקסל
+                        </label>
+                        <input type="file" id="importGermFile" accept=".xlsx,.xls" style="display: none;" onchange="importGerminationFromExcel(event)">
+                    </div>
+                </div>
+                <form id="germinationForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>זן / מספר זן *</label>
+                            <input type="text" id="germ_variety" required>
+                        </div>
+                        <div class="form-group">
+                            <label>אצווה</label>
+                            <input type="text" id="germ_batch">
+                        </div>
+                        <div class="form-group">
+                            <label>שנת קציר *</label>
+                            <input type="number" id="germ_harvest_year" min="2020" max="2030" required>
+                        </div>
+                        <div class="form-group">
+                            <label>תאריך בדיקה *</label>
+                            <input type="date" id="germ_test_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>מספר זרעים נבדקים *</label>
+                            <input type="number" id="germ_seeds_tested" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>השריה (כן/לא + שעות)</label>
+                            <input type="text" id="germ_soaking" placeholder="לדוגמה: no או yes 24h">
+                        </div>
+                        <div class="form-group">
+                            <label>טמפרטורה ממוצעת (°C)</label>
+                            <input type="text" id="germ_temperature" placeholder="לדוגמה: 21-18">
+                        </div>
+                        <div class="form-group">
+                            <label>יום נביטה ראשון</label>
+                            <input type="date" id="germ_first_day">
+                        </div>
+                        <div class="form-group">
+                            <label>יום נביטה אחרון</label>
+                            <input type="date" id="germ_last_day">
+                        </div>
+                        <div class="form-group">
+                            <label>מספר נבטים תקינים *</label>
+                            <input type="number" id="germ_normal_seedlings" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>אחוז נביטה (מחושב אוטומטית)</label>
+                            <div class="calculated-field" id="germ_percentage_display">0%</div>
+                        </div>
+                        <div class="form-group">
+                            <label>הערות</label>
+                            <textarea id="germ_notes" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">💾 שמור בדיקה</button>
+                        <button type="reset" class="btn btn-secondary">🔄 נקה טופס</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="export-section">
+                    <button onclick="exportGerminationToExcel()" class="btn btn-secondary btn-small">
+                        📥 ייצא לאקסל
+                    </button>
+                </div>
+                <h2 class="card-title">📋 היסטוריית בדיקות נביטה</h2>
+                <div class="filters">
+                    <div class="filter-grid">
+                        <div class="form-group">
+                            <label>סינון לפי זן</label>
+                            <input type="text" id="filter_variety" placeholder="הקלד שם זן...">
+                        </div>
+                        <div class="form-group">
+                            <label>סינון לפי שנה</label>
+                            <select id="filter_year">
+                                <option value="">כל השנים</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button onclick="filterGermination()" class="btn btn-primary" style="width: 100%">
+                                🔍 סנן
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container" id="germinationTableContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <p>אין בדיקות נביטה במערכת. התחל להוסיף בדיקות חדשות!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crop Planning Tab -->
+        <div id="crop-plan" class="tab-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 class="card-title" style="margin: 0;">➕ הוספת תכנון גידול חדש</h2>
+                    <div>
+                        <label for="importCropFile" class="btn btn-info btn-small" style="cursor: pointer; margin: 0;">
+                            📤 ייבא מאקסל
+                        </label>
+                        <input type="file" id="importCropFile" accept=".xlsx,.xls" style="display: none;" onchange="importCropPlanFromExcel(event)">
+                    </div>
+                </div>
+                <form id="cropForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>מספר זן *</label>
+                            <input type="number" id="crop_variety_num" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>שם הזן *</label>
+                            <input type="text" id="crop_variety_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>מקור זרעים</label>
+                            <input type="text" id="crop_seed_source">
+                        </div>
+                        <div class="form-group">
+                            <label>מספר אצווה</label>
+                            <input type="text" id="crop_seed_lot">
+                        </div>
+                        <div class="form-group">
+                            <label>תאריך זריעה *</label>
+                            <input type="date" id="crop_sowing_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>תאריך השתלה</label>
+                            <input type="date" id="crop_transplant_date">
+                        </div>
+                        <div class="form-group">
+                            <label>ערוגה / חלקה</label>
+                            <input type="text" id="crop_bed_plot">
+                        </div>
+                        <div class="form-group">
+                            <label>מרווח שתילה (ס"מ)</label>
+                            <input type="number" id="crop_spacing" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>מספר צמחים *</label>
+                            <input type="number" id="crop_plant_count" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>מרחק בידוד (מ')</label>
+                            <input type="number" id="crop_isolation" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>תחילת פריחה</label>
+                            <input type="date" id="crop_flowering_start">
+                        </div>
+                        <div class="form-group">
+                            <label>תחילת קציר</label>
+                            <input type="date" id="crop_harvest_start">
+                        </div>
+                        <div class="form-group">
+                            <label>סיום קציר</label>
+                            <input type="date" id="crop_harvest_end">
+                        </div>
+                        <div class="form-group">
+                            <label>יבול זרעים משוער (ק"ג)</label>
+                            <input type="number" id="crop_estimated_yield" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>יבול זרעים בפועל (ק"ג)</label>
+                            <input type="number" id="crop_actual_yield" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>יבול צפוי לצמח (מחושב אוטומטית)</label>
+                            <div class="calculated-field" id="crop_expected_per_plant">-</div>
+                        </div>
+                        <div class="form-group">
+                            <label>יבול בפועל לצמח (מחושב אוטומטית)</label>
+                            <div class="calculated-field" id="crop_actual_per_plant">-</div>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>הערות</label>
+                            <textarea id="crop_notes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">💾 שמור תכנון</button>
+                        <button type="reset" class="btn btn-secondary">🔄 נקה טופס</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="export-section">
+                    <button onclick="exportCropPlanToExcel()" class="btn btn-secondary btn-small">
+                        📥 ייצא לאקסל
+                    </button>
+                </div>
+                <h2 class="card-title">📋 תכניות גידול</h2>
+                <div class="table-container" id="cropPlanTableContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🌾</div>
+                        <p>אין תכניות גידול במערכת. התחל להוסיף תכניות חדשות!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat_total_tests">0</div>
+                    <div class="stat-label">סך בדיקות נביטה</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat_avg_germination">0%</div>
+                    <div class="stat-label">אחוז נביטה ממוצע</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat_total_varieties">0</div>
+                    <div class="stat-label">סך זנים בגידול</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat_total_plants">0</div>
+                    <div class="stat-label">סך צמחים</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat_total_activities">0</div>
+                    <div class="stat-label">סך פעולות ביומן</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat_total_seasons">0</div>
+                    <div class="stat-label">עונות גידול</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">📊 ביצועי זנים - בדיקות נביטה</h2>
+                <div class="table-container" id="varietyPerformanceContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📈</div>
+                        <p>אין מספיק נתונים להצגת דוח</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">🌾 ביצועי יבול לפי זן</h2>
+                <div class="table-container" id="yieldPerformanceContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📈</div>
+                        <p>אין מספיק נתונים להצגת דוח</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">📅 סיכום פעולות לפי סוג</h2>
+                <div class="table-container" id="activitySummaryContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <p>אין מספיק נתונים להצגת דוח</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <script>
+        // ==================== FIREBASE CONFIGURATION ====================
+        
+        // Firebase configuration - You'll need to replace this with your own config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY_HERE",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        let firebaseApp, auth, database;
+        let currentUser = null;
+        let useFirebase = false;
+
+        // Check if Firebase config is valid
+        if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
+            try {
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                database = firebase.database();
+                useFirebase = true;
+                console.log('✅ Firebase initialized successfully');
+            } catch (error) {
+                console.warn('⚠️ Firebase initialization failed, using local storage', error);
+                useFirebase = false;
+            }
+        } else {
+            console.log('ℹ️ Firebase not configured, using local storage');
+            document.getElementById('loginBtn').style.display = 'none';
+        }
+
+        // Authentication handlers
+        if (useFirebase) {
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('loginBtn').style.display = 'none';
+                    document.getElementById('userInfo').style.display = 'block';
+                    document.getElementById('userName').textContent = user.displayName || user.email;
+                    document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/40';
+                    
+                    // Load data from Firebase
+                    loadDataFromFirebase();
+                } else {
+                    currentUser = null;
+                    document.getElementById('loginBtn').style.display = 'block';
+                    document.getElementById('userInfo').style.display = 'none';
+                    
+                    // Load from localStorage as fallback
+                    loadDataFromLocalStorage();
+                }
+            });
+
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).catch((error) => {
+                    console.error('Login error:', error);
+                    alert('שגיאה בהתחברות. נסה שוב.');
+                });
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                if (confirm('האם אתה בטוח שברצונך להתנתק?')) {
+                    auth.signOut();
+                }
+            });
+        }
+
+        // ==================== DATA SYNC FUNCTIONS ====================
+
+        function updateSyncStatus(status) {
+            const syncStatusEl = document.getElementById('syncStatus');
+            if (syncStatusEl) {
+                switch(status) {
+                    case 'syncing':
+                        syncStatusEl.innerHTML = '🔄 מסנכרן...';
+                        break;
+                    case 'synced':
+                        syncStatusEl.innerHTML = '✅ מסונכרן';
+                        setTimeout(() => {
+                            if (syncStatusEl.innerHTML === '✅ מסונכרן') {
+                                syncStatusEl.innerHTML = '☁️ ענן';
+                            }
+                        }, 2000);
+                        break;
+                    case 'error':
+                        syncStatusEl.innerHTML = '⚠️ שגיאה';
+                        break;
+                }
+            }
+        }
+
+        function saveToFirebase(dataType, data) {
+            if (!useFirebase || !currentUser) {
+                return saveToLocalStorage(dataType, data);
+            }
+
+            updateSyncStatus('syncing');
+            const userRef = database.ref(`users/${currentUser.uid}/${dataType}`);
+            
+            return userRef.set(data)
+                .then(() => {
+                    updateSyncStatus('synced');
+                    console.log(`✅ ${dataType} saved to Firebase`);
+                })
+                .catch((error) => {
+                    console.error(`Error saving ${dataType}:`, error);
+                    updateSyncStatus('error');
+                    // Fallback to localStorage
+                    saveToLocalStorage(dataType, data);
+                });
+        }
+
+        
+        function saveAllData(){
+            try { localStorage.setItem('seasons', JSON.stringify(seasons || [])); } catch(e){}
+            try { localStorage.setItem('journalEntries', JSON.stringify(journalEntries || [])); } catch(e){}
+            try { localStorage.setItem('germinationTests', JSON.stringify(germinationTests || [])); } catch(e){}
+            try { localStorage.setItem('cropPlans', JSON.stringify(cropPlans || [])); } catch(e){}
+            try { localStorage.setItem('currentSeason', currentSeason || ''); } catch(e){}
+            try { localStorage.setItem('currentCropType', currentCropType || 'all'); } catch(e){}
+        }
+function loadDataFromFirebase() {
+            if (!useFirebase || !currentUser) {
+                return loadDataFromLocalStorage();
+            }
+
+            updateSyncStatus('syncing');
+            const userRef = database.ref(`users/${currentUser.uid}`);
+            
+            userRef.once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    
+                    if (data) {
+                        germinationTests = data.germinationTests || [];
+                        cropPlans = data.cropPlans || [];
+                        journalEntries = data.journalEntries || [];
+                        seasons = data.seasons || [];
+                        currentSeason = data.currentSeason || null;
+                        
+                        console.log('✅ Data loaded from Firebase');
+                    } else {
+                        // No data in Firebase, try to migrate from localStorage
+                        migrateFromLocalStorage();
+                    }
+                    
+                    updateSyncStatus('synced');
+                    refreshAllTables();
+                })
+                .catch((error) => {
+                    console.error('Error loading data:', error);
+                    updateSyncStatus('error');
+                    loadDataFromLocalStorage();
+                });
+        }
+
+        function migrateFromLocalStorage() {
+            const hasLocalData = localStorage.getItem('germinationTests') || 
+                                 localStorage.getItem('cropPlans') || 
+                                 localStorage.getItem('journalEntries');
+            
+            if (hasLocalData && confirm('נמצאו נתונים מקומיים. האם להעלות אותם לענן?')) {
+                germinationTests = JSON.parse(localStorage.getItem('germinationTests') || '[]');
+                cropPlans = JSON.parse(localStorage.getItem('cropPlans') || '[]');
+                journalEntries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+                seasons = JSON.parse(localStorage.getItem('seasons') || '[]');
+                currentSeason = localStorage.getItem('currentSeason') || null;
+                
+                // Save to Firebase
+                saveToFirebase('germinationTests', germinationTests);
+                saveToFirebase('cropPlans', cropPlans);
+                saveToFirebase('journalEntries', journalEntries);
+                saveToFirebase('seasons', seasons);
+                saveToFirebase('currentSeason', currentSeason);
+                
+                alert('✅ הנתונים הועלו לענן בהצלחה!');
+            }
+        }
+
+        function saveToLocalStorage(dataType, data) {
+            localStorage.setItem(dataType, typeof data === 'string' ? data : JSON.stringify(data));
+        }
+
+        function loadDataFromLocalStorage() {
+            germinationTests = JSON.parse(localStorage.getItem('germinationTests') || '[]');
+            cropPlans = JSON.parse(localStorage.getItem('cropPlans') || '[]');
+            journalEntries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+            seasons = JSON.parse(localStorage.getItem('seasons') || '[]');
+            currentSeason = localStorage.getItem('currentSeason') || null;
+            
+            refreshAllTables();
+        }
+
+        function refreshAllTables() {
+            loadGerminationTable();
+            loadCropPlanTable();
+            loadJournalTable();
+            updateReports();
+            populateYearFilter();
+            loadSeasons();
+            updateJournalStats();
+        }
+
+        // ==================== DATA STORAGE ====================
+        
+        // Data Storage
+        let germinationTests = JSON.parse(localStorage.getItem('germinationTests')) || [];
+        let cropPlans = JSON.parse(localStorage.getItem('cropPlans')) || [];
+        let journalEntries = JSON.parse(localStorage.getItem('journalEntries')) || [];
+        let seasons = JSON.parse(localStorage.getItem('seasons')) || [];
+        let currentSeason = localStorage.getItem('currentSeason') || null;
+        
+        let editingGermId = null;
+        let editingCropId = null;
+        let editingJournalId = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date as default
+            document.getElementById('journal_date').valueAsDate = new Date();
+            
+            loadGerminationTable();
+            loadCropPlanTable();
+            loadJournalTable();
+            updateReports();
+            populateYearFilter();
+            loadSeasons();
+            updateJournalStats();
+
+            // Auto-calculate germination percentage
+            document.getElementById('germ_seeds_tested').addEventListener('input', calculateGermination);
+            document.getElementById('germ_normal_seedlings').addEventListener('input', calculateGermination);
+
+            // Auto-calculate crop yields
+            document.getElementById('crop_plant_count').addEventListener('input', calculateCropYields);
+            document.getElementById('crop_estimated_yield').addEventListener('input', calculateCropYields);
+            document.getElementById('crop_actual_yield').addEventListener('input', calculateCropYields);
+
+            // Form submissions
+            document.getElementById('germinationForm').addEventListener('submit', saveGermination);
+            document.getElementById('cropForm').addEventListener('submit', saveCropPlan);
+            document.getElementById('journalForm').addEventListener('submit', saveJournalEntry);
+        });
+
+        // Tab Switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'reports') {
+                updateReports();
+            } else if (tabName === 'journal') {
+                updateJournalStats();
+            }
+        }
+
+        // ==================== SEASONS MANAGEMENT ====================
+        
+        function loadSeasons() {
+            const container = document.getElementById('seasonButtons');
+            
+            if (seasons.length === 0) {
+                // Create default season
+                const currentYear = new Date().getFullYear();
+                const defaultSeason = {
+                    id: Date.now(),
+                    name: `${currentYear}-${currentYear + 1}`,
+                    startDate: `${currentYear}-10-01`,
+                    endDate: `${currentYear + 1}-06-30`
+                };
+                seasons.push(defaultSeason);
+                currentSeason = defaultSeason.id;
+                saveToFirebase('seasons', seasons);
+                saveToFirebase('currentSeason', currentSeason);
+            }
+            
+            // Filter seasons by current crop (so you don't see empty seasons from other crops)
+            const seasonsToShow = (currentCropType && currentCropType !== 'all') ? getSeasonsForCurrentCrop() : seasons;
+            if ((currentCropType && currentCropType !== 'all') && seasonsToShow.length > 0 && !seasonsToShow.some(s=>s.id==currentSeason)) {
+                currentSeason = seasonsToShow[0].id;
+                try { localStorage.setItem('currentSeason', currentSeason); } catch(e){}
+                try { saveToFirebase('currentSeason', currentSeason); } catch(e){}
+            }
+
+            let html = '';
+            seasonsToShow.forEach(season => {
+                const activeClass = season.id == currentSeason ? 'active' : '';
+                html += `
+                    <button class="season-btn ${activeClass}" onclick="selectSeason(${season.id})">
+                        ${season.name}
+                        <span class="season-del" title="מחק עונה" onclick="event.stopPropagation();deleteSeason(${season.id})" style="margin-right:8px;cursor:pointer;opacity:.8;">🗑️</span>
+                    </button>
+                `;
+            });
+            
+            container.innerHTML = (seasonsToShow.length ? html : '<div style="padding:10px;color:#6b7280;">אין עונות עם נתונים לגידול הזה (אפשר להוסיף עונה חדשה).</div>');
+            updateCurrentSeasonDisplay();
+        }
+
+        function deleteSeason(seasonId) {
+            if (!seasonId) return;
+
+            const jCount = Array.isArray(journalEntries) ? journalEntries.filter(e => e.seasonId == seasonId).length : 0;
+            const gCount = Array.isArray(germinationTests) ? germinationTests.filter(e => e.seasonId == seasonId).length : 0;
+            const pCount = Array.isArray(cropPlans) ? cropPlans.filter(e => e.seasonId == seasonId).length : 0;
+            const total = jCount + gCount + pCount;
+
+            let msg = total > 0
+                ? `בעונה הזו יש נתונים:\n• יומן עבודה: ${jCount}\n• נביטה: ${gCount}\n• תכנון: ${pCount}\n\nאם תמחק את העונה – כל הנתונים האלה יימחקו.\n\nלהמשיך?`
+                : 'למחוק את העונה?';
+
+            if (!confirm(msg)) return;
+
+            // Cascade delete season data
+            if (Array.isArray(journalEntries)) journalEntries = journalEntries.filter(e => e.seasonId != seasonId);
+            if (Array.isArray(germinationTests)) germinationTests = germinationTests.filter(e => e.seasonId != seasonId);
+            if (Array.isArray(cropPlans)) cropPlans = cropPlans.filter(e => e.seasonId != seasonId);
+
+            seasons = Array.isArray(seasons) ? seasons.filter(s => s.id != seasonId) : [];
+
+            if (currentSeason == seasonId) {
+                currentSeason = seasons.length ? seasons[0].id : null;
+            }
+
+            saveAllData();
+            loadSeasons();
+            try { loadJournalTable(); } catch (e) {}
+            try { loadGerminationTable(); } catch (e) {}
+            try { loadCropPlanTable(); } catch (e) {}
+            try { updateReports(); } catch (e) {}
+        }
+
+
+        function selectSeason(seasonId) {
+            currentSeason = seasonId;
+            saveToFirebase('currentSeason', currentSeason);
+            loadSeasons();
+            loadJournalTable();
+            updateJournalStats();
+        }
+
+        function createNewSeason() {
+            const seasonName = prompt('הכנס שם לעונה החדשה (לדוגמה: 2025-2026):');
+            if (!seasonName) return;
+            
+            const startDate = prompt('תאריך התחלה (YYYY-MM-DD):');
+            if (!startDate) return;
+            
+            const endDate = prompt('תאריך סיום (YYYY-MM-DD):');
+            if (!endDate) return;
+            
+            const newSeason = {
+                id: Date.now(),
+                name: seasonName,
+                startDate: startDate,
+                endDate: endDate
+            };
+            
+            seasons.push(newSeason);
+            currentSeason = newSeason.id;
+            saveToFirebase('seasons', seasons);
+            saveToFirebase('currentSeason', currentSeason);
+            
+            loadSeasons();
+            alert('✅ עונה חדשה נוצרה בהצלחה!');
+        }
+
+        function updateCurrentSeasonDisplay() {
+            const season = seasons.find(s => s.id == currentSeason);
+            const display = document.getElementById('currentSeasonDisplay');
+            if (season && display) {
+                display.textContent = season.name;
+            }
+        }
+
+        // ==================== JOURNAL MANAGEMENT ====================
+
+        function saveJournalEntry(e) {
+            e.preventDefault();
+            
+            const entry = {
+                id: editingJournalId || Date.now(),
+                seasonId: currentSeason,
+                cropTypeId: currentCropType,
+                date: document.getElementById('journal_date').value,
+                activityType: document.getElementById('journal_activity_type').value,
+                action: document.getElementById('journal_action').value,
+                quantity: document.getElementById('journal_quantity').value,
+                irrigation: document.getElementById('journal_irrigation').value,
+                variety: document.getElementById('journal_variety').value,
+                notes: document.getElementById('journal_notes').value
+            };
+            
+            if (editingJournalId) {
+                const index = journalEntries.findIndex(e => e.id === editingJournalId);
+                journalEntries[index] = entry;
+                editingJournalId = null;
+            } else {
+                journalEntries.push(entry);
+            }
+            
+            saveToFirebase('journalEntries', journalEntries);
+            document.getElementById('journalForm').reset();
+            document.getElementById('journal_date').valueAsDate = new Date();
+            loadJournalTable();
+            updateJournalStats();
+            updateReports();
+            alert('✅ הפעולה נשמרה בהצלחה!');
+        }
+
+        function loadJournalTable() {
+            const container = document.getElementById('journalTableContainer');
+            
+            // Filter by current season + crop type
+            let entries = getFilteredJournalEntries();
+            if (entries.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <p>אין פעולות ביומן לעונה זו. התחל לרשום פעולות!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort by date (newest first)
+            entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>תאריך</th>
+                            <th>סוג פעולה</th>
+                            <th>פעולה</th>
+                            <th>כמויות</th>
+                            <th>השקיה/דישון</th>
+                            <th>זן/חלקה</th>
+                            <th>הערות</th>
+                            <th>פעולות</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            entries.forEach(entry => {
+                const activityBadge = getActivityBadge(entry.activityType);
+                html += `
+                    <tr>
+                        <td><strong>${formatDate(entry.date)}</strong></td>
+                        <td>${activityBadge}</td>
+                        <td>${entry.action}</td>
+                        <td>${entry.quantity || '-'}</td>
+                        <td>${entry.irrigation || '-'}</td>
+                        <td>${entry.variety || '-'}</td>
+                        <td>${entry.notes || '-'}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="editJournalEntry(${entry.id})" class="btn btn-secondary btn-small">✏️</button>
+                                <button onclick="deleteJournalEntry(${entry.id})" class="btn btn-danger btn-small">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function getActivityBadge(activityType) {
+            const badges = {
+                'שתילה': '<span class="badge activity-planting">🌱 שתילה</span>',
+                'השקיה': '<span class="badge activity-irrigation">💧 השקיה</span>',
+                'ריסוס': '<span class="badge activity-spraying">🧪 ריסוס</span>',
+                'דישון': '<span class="badge activity-fertilizing">🌾 דישון</span>',
+                'עישוב': '<span class="badge activity-weeding">🪴 עישוב</span>',
+                'קטיף': '<span class="badge activity-harvest">✂️ קטיף</span>',
+                'ניקוי': '<span class="badge activity-cleaning">🧹 ניקוי</span>',
+                'הכנה': '<span class="badge activity-other">🔧 הכנה</span>',
+                'מעקב': '<span class="badge activity-other">👁️ מעקב</span>',
+                'אחר': '<span class="badge activity-other">📝 אחר</span>'
+            };
+            return badges[activityType] || activityType;
+        }
+
+        function editJournalEntry(id) {
+            const entry = journalEntries.find(e => e.id === id);
+            if (!entry) return;
+            
+            editingJournalId = id;
+            document.getElementById('journal_date').value = entry.date;
+            document.getElementById('journal_activity_type').value = entry.activityType;
+            document.getElementById('journal_action').value = entry.action;
+            document.getElementById('journal_quantity').value = entry.quantity;
+            document.getElementById('journal_irrigation').value = entry.irrigation;
+            document.getElementById('journal_variety').value = entry.variety;
+            document.getElementById('journal_notes').value = entry.notes;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteJournalEntry(id) {
+            if (confirm('האם אתה בטוח שברצונך למחוק פעולה זו?')) {
+                journalEntries = journalEntries.filter(e => e.id !== id);
+                saveToFirebase('journalEntries', journalEntries);
+                loadJournalTable();
+                updateJournalStats();
+                updateReports();
+            }
+        }
+
+        function filterJournal() {
+            const activityFilter = document.getElementById('filter_activity_type').value;
+            const varietyFilter = document.getElementById('filter_journal_variety').value.toLowerCase();
+            
+            let filtered = journalEntries.filter(e => e.seasonId == currentSeason);
+            
+            if (activityFilter) {
+                filtered = filtered.filter(e => e.activityType === activityFilter);
+            }
+            
+            if (varietyFilter) {
+                filtered = filtered.filter(e => 
+                    (e.variety && e.variety.toLowerCase().includes(varietyFilter)) ||
+                    (e.action && e.action.toLowerCase().includes(varietyFilter))
+                );
+            }
+            
+            // Temporarily replace data
+            const original = [...journalEntries];
+            journalEntries = filtered;
+            loadJournalTable();
+            journalEntries = original;
+        }
+
+        function updateJournalStats() {
+            let entries = journalEntries;
+            if (currentSeason) {
+                entries = entries.filter(e => e.seasonId == currentSeason);
+            }
+            
+            document.getElementById('stat_journal_total').textContent = entries.length;
+            
+            // Count unique dates (working days)
+            const uniqueDates = [...new Set(entries.map(e => e.date))];
+            document.getElementById('stat_journal_days').textContent = uniqueDates.length;
+            
+            // Last activity
+            if (entries.length > 0) {
+                const sorted = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+                const lastActivity = sorted[0];
+                const daysSince = Math.floor((new Date() - new Date(lastActivity.date)) / (1000 * 60 * 60 * 24));
+                document.getElementById('stat_last_activity').textContent = daysSince === 0 ? 'היום' : `לפני ${daysSince} ימים`;
+            } else {
+                document.getElementById('stat_last_activity').textContent = '-';
+            }
+        }
+
+        function exportJournalToExcel() {
+            let entries = journalEntries;
+            if (currentSeason) {
+                entries = entries.filter(e => e.seasonId == currentSeason);
+            }
+            
+            if (entries.length === 0) {
+                alert('אין נתונים לייצוא');
+                return;
+            }
+            
+            const season = seasons.find(s => s.id == currentSeason);
+            const seasonName = season ? season.name : 'כל העונות';
+            
+            const data = entries.map(entry => ({
+                'תאריך': entry.date,
+                'סוג פעולה': entry.activityType,
+                'פעולה': entry.action,
+                'כמויות': entry.quantity,
+                'השקיה ודישון': entry.irrigation,
+                'זן/חלקה': entry.variety,
+                'הערות': entry.notes
+            }));
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "יומן עבודה");
+            XLSX.writeFile(wb, `journal_${seasonName}_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        // ==================== GERMINATION MANAGEMENT ====================
+
+        function calculateGermination() {
+            const seedsTested = parseFloat(document.getElementById('germ_seeds_tested').value) || 0;
+            const normalSeedlings = parseFloat(document.getElementById('germ_normal_seedlings').value) || 0;
+            
+            if (seedsTested > 0) {
+                const percentage = (normalSeedlings / seedsTested * 100).toFixed(1);
+                document.getElementById('germ_percentage_display').textContent = percentage + '%';
+            } else {
+                document.getElementById('germ_percentage_display').textContent = '0%';
+            }
+        }
+
+        function saveGermination(e) {
+            e.preventDefault();
+            
+            const seedsTested = parseFloat(document.getElementById('germ_seeds_tested').value);
+            const normalSeedlings = parseFloat(document.getElementById('germ_normal_seedlings').value);
+            const germPercentage = (normalSeedlings / seedsTested * 100).toFixed(1);
+            
+            const test = {
+                id: editingGermId || Date.now(),
+                seasonId: currentSeason,
+                cropTypeId: currentCropType,
+                variety: document.getElementById('germ_variety').value,
+                batch: document.getElementById('germ_batch').value,
+                harvestYear: document.getElementById('germ_harvest_year').value,
+                testDate: document.getElementById('germ_test_date').value,
+                seedsTested: seedsTested,
+                soaking: document.getElementById('germ_soaking').value,
+                temperature: document.getElementById('germ_temperature').value,
+                firstDay: document.getElementById('germ_first_day').value,
+                lastDay: document.getElementById('germ_last_day').value,
+                normalSeedlings: normalSeedlings,
+                germPercentage: germPercentage,
+                notes: document.getElementById('germ_notes').value
+            };
+            
+            if (editingGermId) {
+                const index = germinationTests.findIndex(t => t.id === editingGermId);
+                germinationTests[index] = test;
+                editingGermId = null;
+            } else {
+                germinationTests.push(test);
+            }
+            
+            saveToFirebase('germinationTests', germinationTests);
+            document.getElementById('germinationForm').reset();
+            calculateGermination();
+            loadGerminationTable();
+            updateReports();
+            alert('✅ הבדיקה נשמרה בהצלחה!');
+        }
+
+        function loadGerminationTable() {
+            const container = document.getElementById('germinationTableContainer');
+            
+            const tests = getFilteredGerminationTests();
+            
+            if (tests.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <p>אין בדיקות נביטה במערכת. התחל להוסיף בדיקות חדשות!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>זן</th>
+                            <th>שנת קציר</th>
+                            <th>תאריך בדיקה</th>
+                            <th>זרעים נבדקו</th>
+                            <th>נבטים תקינים</th>
+                            <th>אחוז נביטה</th>
+                            <th>טמפרטורה</th>
+                            <th>הערות</th>
+                            <th>פעולות</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            tests.forEach(test => {
+                const germPercent = parseFloat(test.germPercentage) || 0;
+                const germClass = germPercent >= 80 ? 'success' : germPercent >= 60 ? 'warning' : 'danger';
+                const displayPercent = isNaN(germPercent) || germPercent === 0 ? '-' : germPercent + '%';
+                
+                html += `
+                    <tr>
+                        <td><strong>${test.variety || '-'}</strong></td>
+                        <td>${test.harvestYear || '-'}</td>
+                        <td>${formatDate(test.testDate) || '-'}</td>
+                        <td>${test.seedsTested || '-'}</td>
+                        <td>${test.normalSeedlings || '-'}</td>
+                        <td><span class="badge badge-${germClass}">${displayPercent}</span></td>
+                        <td>${test.temperature || '-'}</td>
+                        <td>${test.notes || '-'}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="editGermination(${test.id})" class="btn btn-secondary btn-small">✏️</button>
+                                <button onclick="deleteGermination(${test.id})" class="btn btn-danger btn-small">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function editGermination(id) {
+            const test = germinationTests.find(t => t.id === id);
+            if (!test) return;
+            
+            editingGermId = id;
+            document.getElementById('germ_variety').value = test.variety;
+            document.getElementById('germ_batch').value = test.batch;
+            document.getElementById('germ_harvest_year').value = test.harvestYear;
+            document.getElementById('germ_test_date').value = test.testDate;
+            document.getElementById('germ_seeds_tested').value = test.seedsTested;
+            document.getElementById('germ_soaking').value = test.soaking;
+            document.getElementById('germ_temperature').value = test.temperature;
+            document.getElementById('germ_first_day').value = test.firstDay;
+            document.getElementById('germ_last_day').value = test.lastDay;
+            document.getElementById('germ_normal_seedlings').value = test.normalSeedlings;
+            document.getElementById('germ_notes').value = test.notes;
+            
+            calculateGermination();
+            switchTab('germination');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteGermination(id) {
+            if (confirm('האם אתה בטוח שברצונך למחוק בדיקה זו?')) {
+                germinationTests = germinationTests.filter(t => t.id !== id);
+                saveToFirebase('germinationTests', germinationTests);
+                loadGerminationTable();
+                updateReports();
+            }
+        }
+
+        function populateYearFilter() {
+            const years = [...new Set(germinationTests.map(t => t.harvestYear))].sort((a, b) => b - a);
+            const select = document.getElementById('filter_year');
+            select.innerHTML = '<option value="">כל השנים</option>';
+            years.forEach(year => {
+                select.innerHTML += `<option value="${year}">${year}</option>`;
+            });
+        }
+
+        function filterGermination() {
+            const varietyFilter = document.getElementById('filter_variety').value.toLowerCase();
+            const yearFilter = document.getElementById('filter_year').value;
+            
+            let filtered = germinationTests;
+            
+            if (varietyFilter) {
+                filtered = filtered.filter(t => t.variety.toLowerCase().includes(varietyFilter));
+            }
+            
+            if (yearFilter) {
+                filtered = filtered.filter(t => t.harvestYear === yearFilter);
+            }
+            
+            const original = [...germinationTests];
+            germinationTests = filtered;
+            loadGerminationTable();
+            germinationTests = original;
+        }
+
+        function exportGerminationToExcel() {
+            if (germinationTests.length === 0) {
+                alert('אין נתונים לייצוא');
+                return;
+            }
+            
+            const data = germinationTests.map(test => ({
+                'זן': test.variety,
+                'אצווה': test.batch,
+                'שנת קציר': test.harvestYear,
+                'תאריך בדיקה': test.testDate,
+                'מספר זרעים': test.seedsTested,
+                'השריה': test.soaking,
+                'טמפרטורה': test.temperature,
+                'יום נביטה ראשון': test.firstDay,
+                'יום נביטה אחרון': test.lastDay,
+                'נבטים תקינים': test.normalSeedlings,
+                'אחוז נביטה': test.germPercentage,
+                'הערות': test.notes
+            }));
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "בדיקות נביטה");
+            XLSX.writeFile(wb, `germination_tests_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        // ==================== CROP PLAN MANAGEMENT ====================
+
+        function calculateCropYields() {
+            const plantCount = parseFloat(document.getElementById('crop_plant_count').value) || 0;
+            const estimatedYield = parseFloat(document.getElementById('crop_estimated_yield').value) || 0;
+            const actualYield = parseFloat(document.getElementById('crop_actual_yield').value) || 0;
+            
+            if (plantCount > 0 && estimatedYield > 0) {
+                const expectedPerPlant = (estimatedYield * 1000 / plantCount).toFixed(1);
+                document.getElementById('crop_expected_per_plant').textContent = expectedPerPlant + ' גרם';
+            } else {
+                document.getElementById('crop_expected_per_plant').textContent = '-';
+            }
+            
+            if (plantCount > 0 && actualYield > 0) {
+                const actualPerPlant = (actualYield * 1000 / plantCount).toFixed(1);
+                document.getElementById('crop_actual_per_plant').textContent = actualPerPlant + ' גרם';
+            } else {
+                document.getElementById('crop_actual_per_plant').textContent = '-';
+            }
+        }
+
+        function saveCropPlan(e) {
+            e.preventDefault();
+            
+            const plantCount = parseFloat(document.getElementById('crop_plant_count').value);
+            const estimatedYield = parseFloat(document.getElementById('crop_estimated_yield').value) || 0;
+            const actualYield = parseFloat(document.getElementById('crop_actual_yield').value) || 0;
+            
+            const expectedPerPlant = plantCount > 0 && estimatedYield > 0 ? (estimatedYield * 1000 / plantCount).toFixed(1) : null;
+            const actualPerPlant = plantCount > 0 && actualYield > 0 ? (actualYield * 1000 / plantCount).toFixed(1) : null;
+            
+            const plan = {
+                id: editingCropId || Date.now(),
+                seasonId: currentSeason,
+                cropTypeId: currentCropType,
+                varietyNum: document.getElementById('crop_variety_num').value,
+                varietyName: document.getElementById('crop_variety_name').value,
+                seedSource: document.getElementById('crop_seed_source').value,
+                seedLot: document.getElementById('crop_seed_lot').value,
+                sowingDate: document.getElementById('crop_sowing_date').value,
+                transplantDate: document.getElementById('crop_transplant_date').value,
+                bedPlot: document.getElementById('crop_bed_plot').value,
+                spacing: document.getElementById('crop_spacing').value,
+                plantCount: plantCount,
+                isolation: document.getElementById('crop_isolation').value,
+                floweringStart: document.getElementById('crop_flowering_start').value,
+                harvestStart: document.getElementById('crop_harvest_start').value,
+                harvestEnd: document.getElementById('crop_harvest_end').value,
+                estimatedYield: estimatedYield,
+                actualYield: actualYield,
+                expectedPerPlant: expectedPerPlant,
+                actualPerPlant: actualPerPlant,
+                notes: document.getElementById('crop_notes').value
+            };
+            
+            if (editingCropId) {
+                const index = cropPlans.findIndex(p => p.id === editingCropId);
+                cropPlans[index] = plan;
+                editingCropId = null;
+            } else {
+                cropPlans.push(plan);
+            }
+            
+            saveToFirebase('cropPlans', cropPlans);
+            document.getElementById('cropForm').reset();
+            calculateCropYields();
+            loadCropPlanTable();
+            updateReports();
+            alert('✅ התכנון נשמר בהצלחה!');
+        }
+
+        function loadCropPlanTable() {
+            const container = document.getElementById('cropPlanTableContainer');
+            
+            const plans = getFilteredCropPlans();
+            
+            if (plans.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🌾</div>
+                        <p>אין תכניות גידול במערכת. התחל להוסיף תכניות חדשות!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>שם הזן</th>
+                            <th>תאריך זריעה</th>
+                            <th>מספר צמחים</th>
+                            <th>יבול משוער (ק"ג)</th>
+                            <th>יבול בפועל (ק"ג)</th>
+                            <th>יבול לצמח (גרם)</th>
+                            <th>הערות</th>
+                            <th>פעולות</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            cropPlans.forEach(plan => {
+                html += `
+                    <tr>
+                        <td><strong>${plan.varietyNum}</strong></td>
+                        <td>${plan.varietyName}</td>
+                        <td>${formatDate(plan.sowingDate)}</td>
+                        <td>${plan.plantCount}</td>
+                        <td>${plan.estimatedYield || '-'}</td>
+                        <td>${plan.actualYield || '-'}</td>
+                        <td>${plan.actualPerPlant ? plan.actualPerPlant + ' גרם' : (plan.expectedPerPlant ? plan.expectedPerPlant + ' גרם (צפוי)' : '-')}</td>
+                        <td>${plan.notes || '-'}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button onclick="editCropPlan(${plan.id})" class="btn btn-secondary btn-small">✏️</button>
+                                <button onclick="deleteCropPlan(${plan.id})" class="btn btn-danger btn-small">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function editCropPlan(id) {
+            const plan = cropPlans.find(p => p.id === id);
+            if (!plan) return;
+            
+            editingCropId = id;
+            document.getElementById('crop_variety_num').value = plan.varietyNum;
+            document.getElementById('crop_variety_name').value = plan.varietyName;
+            document.getElementById('crop_seed_source').value = plan.seedSource;
+            document.getElementById('crop_seed_lot').value = plan.seedLot;
+            document.getElementById('crop_sowing_date').value = plan.sowingDate;
+            document.getElementById('crop_transplant_date').value = plan.transplantDate;
+            document.getElementById('crop_bed_plot').value = plan.bedPlot;
+            document.getElementById('crop_spacing').value = plan.spacing;
+            document.getElementById('crop_plant_count').value = plan.plantCount;
+            document.getElementById('crop_isolation').value = plan.isolation;
+            document.getElementById('crop_flowering_start').value = plan.floweringStart;
+            document.getElementById('crop_harvest_start').value = plan.harvestStart;
+            document.getElementById('crop_harvest_end').value = plan.harvestEnd;
+            document.getElementById('crop_estimated_yield').value = plan.estimatedYield;
+            document.getElementById('crop_actual_yield').value = plan.actualYield;
+            document.getElementById('crop_notes').value = plan.notes;
+            
+            calculateCropYields();
+            switchTab('crop-plan');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteCropPlan(id) {
+            if (confirm('האם אתה בטוח שברצונך למחוק תכנון זה?')) {
+                cropPlans = cropPlans.filter(p => p.id !== id);
+                saveToFirebase('cropPlans', cropPlans);
+                loadCropPlanTable();
+                updateReports();
+            }
+        }
+
+        function exportCropPlanToExcel() {
+            if (cropPlans.length === 0) {
+                alert('אין נתונים לייצוא');
+                return;
+            }
+            
+            const data = cropPlans.map(plan => ({
+                'מספר זן': plan.varietyNum,
+                'שם זן': plan.varietyName,
+                'מקור זרעים': plan.seedSource,
+                'מספר אצווה': plan.seedLot,
+                'תאריך זריעה': plan.sowingDate,
+                'תאריך השתלה': plan.transplantDate,
+                'ערוגה/חלקה': plan.bedPlot,
+                'מרווח שתילה': plan.spacing,
+                'מספר צמחים': plan.plantCount,
+                'מרחק בידוד': plan.isolation,
+                'תחילת פריחה': plan.floweringStart,
+                'תחילת קציר': plan.harvestStart,
+                'סיום קציר': plan.harvestEnd,
+                'יבול משוער (ק"ג)': plan.estimatedYield,
+                'יבול בפועל (ק"ג)': plan.actualYield,
+                'יבול צפוי לצמח (גרם)': plan.expectedPerPlant,
+                'יבול בפועל לצמח (גרם)': plan.actualPerPlant,
+                'הערות': plan.notes
+            }));
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "תכניות גידול");
+            XLSX.writeFile(wb, `crop_plans_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        // ==================== REPORTS ====================
+
+        function updateReports() {
+            // Basic stats
+            const tests = getFilteredGerminationTests();
+            const plans = getFilteredCropPlans();
+            const journal = getFilteredJournalEntries();
+            document.getElementById('stat_total_tests').textContent = tests.length;
+            
+            if (tests.length > 0) {
+                const avgGerm = tests.reduce((sum, t) => sum + parseFloat(t.germPercentage), 0) / tests.length;
+                document.getElementById('stat_avg_germination').textContent = avgGerm.toFixed(1) + '%';
+            } else {
+                document.getElementById('stat_avg_germination').textContent = '0%';
+            }
+            
+            document.getElementById('stat_total_varieties').textContent = cropPlans.length;
+            
+            const totalPlants = cropPlans.reduce((sum, p) => sum + (parseFloat(p.plantCount) || 0), 0);
+            document.getElementById('stat_total_plants').textContent = totalPlants.toLocaleString();
+            
+            document.getElementById('stat_total_activities').textContent = journalEntries.length;
+            document.getElementById('stat_total_seasons').textContent = seasons.length;
+            
+            // Variety Performance (Germination)
+            updateVarietyPerformance();
+            
+            // Yield Performance
+            updateYieldPerformance();
+            
+            // Activity Summary
+            updateActivitySummary();
+        }
+
+        function updateVarietyPerformance() {
+            const varietyPerf = {};
+            germinationTests.forEach(test => {
+                if (!varietyPerf[test.variety]) {
+                    varietyPerf[test.variety] = {
+                        count: 0,
+                        totalGerm: 0,
+                        totalSeeds: 0,
+                        totalNormal: 0
+                    };
+                }
+                varietyPerf[test.variety].count++;
+                varietyPerf[test.variety].totalGerm += parseFloat(test.germPercentage);
+                varietyPerf[test.variety].totalSeeds += parseFloat(test.seedsTested);
+                varietyPerf[test.variety].totalNormal += parseFloat(test.normalSeedlings);
+            });
+            
+            const perfContainer = document.getElementById('varietyPerformanceContainer');
+            if (Object.keys(varietyPerf).length > 0) {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>זן</th>
+                                <th>מספר בדיקות</th>
+                                <th>סך זרעים נבדקו</th>
+                                <th>סך נבטים תקינים</th>
+                                <th>אחוז נביטה ממוצע</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                Object.entries(varietyPerf).forEach(([variety, data]) => {
+                    const avgGerm = data.totalGerm / data.count;
+                    const germClass = avgGerm >= 80 ? 'success' : avgGerm >= 60 ? 'warning' : 'danger';
+                    html += `
+                        <tr>
+                            <td><strong>${variety}</strong></td>
+                            <td>${data.count}</td>
+                            <td>${data.totalSeeds}</td>
+                            <td>${data.totalNormal}</td>
+                            <td><span class="badge badge-${germClass}">${avgGerm.toFixed(1)}%</span></td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                perfContainer.innerHTML = html;
+            } else {
+                perfContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📈</div>
+                        <p>אין מספיק נתונים להצגת דוח</p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateYieldPerformance() {
+            const yieldContainer = document.getElementById('yieldPerformanceContainer');
+            const plansWithYield = cropPlans.filter(p => p.actualYield > 0);
+            
+            if (plansWithYield.length > 0) {
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>זן</th>
+                                <th>מספר צמחים</th>
+                                <th>יבול בפועל (ק"ג)</th>
+                                <th>יבול לצמח (גרם)</th>
+                                <th>יבול משוער (ק"ג)</th>
+                                <th>הפרש (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                plansWithYield.forEach(plan => {
+                    const diff = plan.estimatedYield ? ((plan.actualYield - plan.estimatedYield) / plan.estimatedYield * 100).toFixed(1) : null;
+                    const diffClass = diff > 0 ? 'success' : diff < 0 ? 'danger' : 'warning';
+                    html += `
+                        <tr>
+                            <td><strong>${plan.varietyName}</strong></td>
+                            <td>${plan.plantCount}</td>
+                            <td>${plan.actualYield}</td>
+                            <td>${plan.actualPerPlant} גרם</td>
+                            <td>${plan.estimatedYield || '-'}</td>
+                            <td>${diff ? '<span class="badge badge-' + diffClass + '">' + (diff > 0 ? '+' : '') + diff + '%</span>' : '-'}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                yieldContainer.innerHTML = html;
+            } else {
+                yieldContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📈</div>
+                        <p>אין מספיק נתונים להצגת דוח. הזן יבול בפועל בתכניות הגידול.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateActivitySummary() {
+            const activityContainer = document.getElementById('activitySummaryContainer');
+            
+            if (journalEntries.length === 0) {
+                activityContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <p>אין פעולות ביומן להצגת דוח</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Count activities by type
+            const activityCount = {};
+            journalEntries.forEach(entry => {
+                activityCount[entry.activityType] = (activityCount[entry.activityType] || 0) + 1;
+            });
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>סוג פעולה</th>
+                            <th>מספר פעולות</th>
+                            <th>אחוז מכלל הפעולות</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            const total = journalEntries.length;
+            Object.entries(activityCount)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([type, count]) => {
+                    const percentage = (count / total * 100).toFixed(1);
+                    html += `
+                        <tr>
+                            <td>${getActivityBadge(type)}</td>
+                            <td><strong>${count}</strong></td>
+                            <td><span class="badge badge-info">${percentage}%</span></td>
+                        </tr>
+                    `;
+                });
+            
+            html += '</tbody></table>';
+            activityContainer.innerHTML = html;
+        }
+
+        // ==================== IMPORT FROM EXCEL ====================
+
+        function importJournalFromExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    let importedCount = 0;
+                    let seasonMapping = {};
+                    let lastSeasonIdUsed = currentSeason;
+                    let lastCropIdUsed = currentCropType || 'all';
+                    
+                    // Process each sheet as a potential season
+                    workbook.SheetNames.forEach(sheetName => {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        
+                        if (jsonData.length < 2) return; // Skip empty sheets
+                        
+                        // Try to find or create season
+                        let seasonId = currentSeason;
+                        
+                        // Check if sheet name looks like a season (e.g., "22-23", "2024-25", "נוריות 24-25")
+                        const seasonMatch = sheetName.match(/(\d{2,4}[-\/]\d{2,4})/);
+                        if (seasonMatch) {
+                            const seasonName = seasonMatch[1];
+                            let season = seasons.find(s => s.name.includes(seasonName));
+                            
+                            if (!season) {
+                                // Create new season
+                                season = {
+                                    id: Date.now() + Math.random(),
+                                    name: seasonName,
+                                    startDate: new Date().toISOString().split('T')[0],
+                                    endDate: new Date().toISOString().split('T')[0]
+                                };
+                                seasons.push(season);
+                            }
+                            seasonId = season.id;
+                            lastSeasonIdUsed = seasonId;
+                            seasonMapping[sheetName] = seasonName;
+                        }
+                        
+                        // Find header row (look for 'תאריך' or 'date')
+                        let headerRow = -1;
+                        for (let i = 0; i < Math.min(5, jsonData.length); i++) {
+                            const row = jsonData[i];
+                            if (row.some(cell => 
+                                cell && (
+                                    String(cell).includes('תאריך') || 
+                                    String(cell).toLowerCase().includes('date') ||
+                                    String(cell).includes('פעולה')
+                                )
+                            )) {
+                                headerRow = i;
+                                break;
+                            }
+                        }
+                        
+                        if (headerRow === -1) return;
+                        
+                        const headers = jsonData[headerRow];
+                        const dateCol = headers.findIndex(h => h && (String(h).includes('תאריך') || String(h).toLowerCase().includes('date')));
+                        const actionCol = headers.findIndex(h => h && String(h).includes('פעולה'));
+                        const quantityCol = headers.findIndex(h => h && String(h).includes('כמות'));
+                        const irrigationCol = headers.findIndex(h => h && (String(h).includes('השקיה') || String(h).includes('דישון') || String(h).toLowerCase().includes('ec')));
+                        const notesCol = headers.findIndex(h => h && String(h).includes('הערות'));
+                        
+                        // Process data rows
+                        for (let i = headerRow + 1; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            if (!row || row.length === 0) continue;
+                            
+                            const dateValue = row[dateCol];
+                            if (!dateValue) continue;
+                            
+                            // Parse date
+                            let dateStr = '';
+                            if (typeof dateValue === 'number') {
+                                // Excel date serial number
+                                const excelEpoch = new Date(1900, 0, 1);
+                                const days = dateValue - 2; // Excel counts from 1900-01-01 and has a leap year bug
+                                const date = new Date(excelEpoch.getTime() + days * 24 * 60 * 60 * 1000);
+                                dateStr = date.toISOString().split('T')[0];
+                            } else {
+                                // Try to parse as string
+                                const dateMatch = String(dateValue).match(/(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})/);
+                                if (dateMatch) {
+                                    let day = dateMatch[1].padStart(2, '0');
+                                    let month = dateMatch[2].padStart(2, '0');
+                                    let year = dateMatch[3];
+                                    if (year.length === 2) {
+                                        year = (parseInt(year) > 50 ? '19' : '20') + year;
+                                    }
+                                    dateStr = `${year}-${month}-${day}`;
+                                }
+                            }
+                            
+                            if (!dateStr) continue;
+                            
+                            const action = actionCol >= 0 ? String(row[actionCol] || '') : '';
+                            if (!action) continue;
+                            
+                            // Determine activity type from action text
+                            let activityType = 'אחר';
+                            if (action.includes('שתיל')) activityType = 'שתילה';
+                            else if (action.includes('השקי') || action.includes('השקיי')) activityType = 'השקיה';
+                            else if (action.includes('ריסוס')) activityType = 'ריסוס';
+                            else if (action.includes('דישון') || action.includes('דשן')) activityType = 'דישון';
+                            else if (action.includes('עישוב')) activityType = 'עישוב';
+                            else if (action.includes('קטיף')) activityType = 'קטיף';
+                            else if (action.includes('ניקוי') || action.includes('ניקיון')) activityType = 'ניקוי';
+                            else if (action.includes('הכנ')) activityType = 'הכנה';
+                            else if (action.includes('פריח') || action.includes('תחילת')) activityType = 'מעקב';
+                            
+                            const entry = {
+                                id: Date.now() + Math.random(),
+                                seasonId: seasonId,
+                                
+                                
+                                
+                                cropTypeId: inferCropTypeIdFromRow(headers, row) || (currentCropType || 'all'),
+cropTypeId: inferCropTypeIdFromRow(headers, row) || (currentCropType || 'all'),
+cropTypeId: inferCropTypeIdFromRow(headers, row) || (currentCropType || 'all'),
+date: dateStr,
+                                activityType: activityType,
+                                action: action,
+                                quantity: quantityCol >= 0 ? String(row[quantityCol] || '') : '',
+                                irrigation: irrigationCol >= 0 ? String(row[irrigationCol] || '') : '',
+                                variety: '',
+                                notes: notesCol >= 0 ? String(row[notesCol] || '') : ''
+                            };
+                            
+                            journalEntries.push(entry);
+                            importedCount++;
+                        }
+                    });
+                    
+                    saveToFirebase('journalEntries', journalEntries);
+                    saveToFirebase('seasons', seasons);
+                    loadSeasons();
+                    loadJournalTable();
+                    updateJournalStats();
+                    updateReports();
+                    
+                    let message = `✅ יובאו בהצלחה ${importedCount} פעולות!`;
+                    if (Object.keys(seasonMapping).length > 0) {
+                        message += '\n\nעונות שזוהו:\n' + Object.entries(seasonMapping).map(([sheet, season]) => `• ${sheet} → ${season}`).join('\n');
+                    }
+                    
+                    // Switch to the last imported season/crop so data is visible immediately
+                    if (lastSeasonIdUsed) {
+                        currentSeason = lastSeasonIdUsed;
+                        try { localStorage.setItem('currentSeason', currentSeason); } catch(e){}
+                    }
+                    try { loadSeasons(); } catch(e){}
+                    try { switchCropType(currentCropType || 'all'); } catch(e){}
+                                                            try { saveAllData(); } catch(e){}
+try { saveAllData(); } catch(e){}
+try { saveAllData(); } catch(e){}
+alert(message);
+                    
+                } catch (error) {
+                    console.error('Import error:', error);
+                    alert('שגיאה בייבוא הקובץ. נא לוודא שהקובץ בפורמט נכון.\n\nהקובץ צריך להכיל עמודות: תאריך, פעולה, כמויות, הערות');
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+            event.target.value = ''; // Reset file input
+        }
+
+        function importGerminationFromExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+
+                    let importedCount = 0;
+                    let lastSeasonIdUsed = currentSeason;
+
+                    // Helper: ensure season exists by name and return id
+                    const ensureSeasonByName = (name) => {
+                        const seasonName = String(name || '').trim();
+                        if (!seasonName) return currentSeason;
+                        let s = seasons.find(x => String(x.name) === seasonName || String(x.id) === seasonName);
+                        if (!s) {
+                            s = { id: Date.now() + Math.floor(Math.random()*1000), name: seasonName };
+                            seasons.push(s);
+                        }
+                        return s.id;
+                    };
+
+                    // Helper: find column index by keywords
+                    const findIdx = (headers, kws) => {
+                        const h = headers.map(x => String(x||'').toLowerCase());
+                        for (const kw of kws) {
+                            const k = String(kw).toLowerCase();
+                            const idx = h.findIndex(v => v.includes(k));
+                            if (idx >= 0) return idx;
+                        }
+                        return -1;
+                    };
+
+                    const parseDateCell = (v) => {
+                        if (!v) return '';
+                        // If it's already a date string, keep it
+                        const s = String(v).trim();
+                        // Excel serial
+                        if (!isNaN(Number(v)) && Number(v) > 20000 && Number(v) < 90000) {
+                            try {
+                                const d = XLSX.SSF.parse_date_code(Number(v));
+                                if (d) {
+                                    const mm = String(d.m).padStart(2,'0');
+                                    const dd = String(d.d).padStart(2,'0');
+                                    return `${d.y}-${mm}-${dd}`;
+                                }
+                            } catch(err) {}
+                        }
+                        // Try normalizeDate if exists
+                        try { return normalizeDate(s) || s; } catch(err) { return s; }
+                    };
+
+                    // Infer cropTypeId from a row if a crop column exists; otherwise use currentCropType
+                    const inferCropTypeIdFromRow = (headers, row) => {
+                        const idx = findIdx(headers, ['crop', 'גידול', 'flower', 'סוג פרח', 'crop type']);
+                        if (idx < 0) return (currentCropType || 'all');
+                        const val = String(row[idx] || '').trim().toLowerCase();
+                        if (!val) return (currentCropType || 'all');
+                        // Match by id or name
+                        const ct = (cropTypes || []).find(c =>
+                            String(c.id||'').toLowerCase() === val || String(c.name||'').toLowerCase() === val
+                        );
+                        if (ct) return ct.id;
+                        if (val.includes('sweet') || val.includes('pea') || val.includes('סוויט') || val.includes('טופח')) return 'sweet-pea';
+                        if (val.includes('calendula') || val.includes('קלנדולה') || val.includes('ציפורן')) return 'calendula';
+                        if (val.includes('ranunculus') || val.includes('נוריות')) return 'ranunculus';
+                        return (currentCropType || 'all');
+                    };
+
+                    workbook.SheetNames.forEach(sheetName => {
+                        const sheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                        if (!jsonData || jsonData.length < 2) return;
+
+                        // Find header row (first 5 rows)
+                        let headerRow = 0;
+                        for (let i = 0; i < Math.min(5, jsonData.length); i++) {
+                            const row = jsonData[i] || [];
+                            const rowStr = row.map(x => String(x||'')).join(' ').toLowerCase();
+                            if (rowStr.includes('variety') || rowStr.includes('זן')) { headerRow = i; break; }
+                        }
+
+                        const headers = (jsonData[headerRow] || []).map(h => String(h || '').trim());
+                        // Determine season from sheet name
+                        const seasonId = ensureSeasonByName(sheetName);
+                        lastSeasonIdUsed = seasonId;
+
+                        const idxVariety = findIdx(headers, ['variety', 'זן']);
+                        const idxTestDate = findIdx(headers, ['test date', 'תאריך בדיקה', 'date']);
+                        const idxTested = findIdx(headers, ['number of seeds tested', 'seeds tested', 'נבדקו', 'כמות נבדקה', 'tested']);
+                        const idxGerm = findIdx(headers, ['number of germinated seedlings', 'germinated', 'נבטו', 'כמות שנבטו']);
+                        const idxPerc = findIdx(headers, ['germination %', 'germination', '%']);
+                        const idxObs = findIdx(headers, ['observations', 'הערות', 'notes', 'comment']);
+
+                        for (let r = headerRow + 1; r < jsonData.length; r++) {
+                            const row = jsonData[r];
+                            if (!row || row.every(c => String(c||'').trim()==='')) continue;
+
+                            const variety = idxVariety>=0 ? String(row[idxVariety]||'').trim() : '';
+                            const tested = idxTested>=0 ? Number(row[idxTested]||0) : 0;
+                            const germinated = idxGerm>=0 ? Number(row[idxGerm]||0) : 0;
+                            const perc = idxPerc>=0 ? String(row[idxPerc]||'').trim() : '';
+                            const notes = idxObs>=0 ? String(row[idxObs]||'').trim() : '';
+                            const testDate = idxTestDate>=0 ? parseDateCell(row[idxTestDate]) : '';
+
+                            if (!variety && !tested && !germinated && !notes) continue;
+
+                            const cropTypeId = inferCropTypeIdFromRow(headers, row);
+
+                            const test = {
+                                id: Date.now() + Math.floor(Math.random()*1000000),
+                                cropTypeId: cropTypeId || (currentCropType || 'all'),
+                                seasonId: seasonId,
+                                variety: variety,
+                                tested: tested || 0,
+                                germinated: germinated || 0,
+                                germinationPercent: perc,
+                                testDate: testDate,
+                                notes: notes
+                            };
+
+                            germinationTests.push(test);
+                            importedCount++;
+                        }
+                    });
+
+                    // Persist and refresh
+                    currentSeason = lastSeasonIdUsed || currentSeason;
+                    try { localStorage.setItem('currentSeason', currentSeason); } catch(err) {}
+                    try { saveAllData(); } catch(err) {}
+                    loadSeasons();
+                    switchCropType(currentCropType || 'all');
+                    loadGerminationTable();
+
+                    alert(`ייבוא בדיקות נביטה הושלם: ${importedCount} רשומות`);
+                } catch (err) {
+                    console.error(err);
+                    alert('שגיאה בייבוא קובץ נביטה. ודא שזה קובץ Excel תקין.');
+                } finally {
+                    event.target.value = '';
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function importCropPlanFromExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                    
+                    if (jsonData.length < 2) {
+                        
+                    // Switch to the last imported season/crop so data is visible immediately
+                    if (lastSeasonIdUsed) {
+                        currentSeason = lastSeasonIdUsed;
+                        try { localStorage.setItem('currentSeason', currentSeason); } catch(e){}
+                    }
+                    try { loadSeasons(); } catch(e){}
+                    try { switchCropType(currentCropType || 'all'); } catch(e){}
+alert('הקובץ ריק או לא מכיל נתונים');
+                        return;
+                    }
+                    
+                    // Find header row
+                    let headerRow = 0;
+                    for (let i = 0; i < Math.min(3, jsonData.length); i++) {
+                        const row = jsonData[i];
+                        if (row.some(cell => cell && (String(cell).includes('Variety') || String(cell).includes('זן')))) {
+                            headerRow = i;
+                            break;
+                        }
+                    }
+                    
+                    let importedCount = 0;
+                    
+                    // Process data rows
+                    for (let i = headerRow + 1; i < jsonData.length; i++) {
+                        const row = jsonData[i];
+                        if (!row || row.length === 0 || !row[1]) continue;
+                        
+                        const varietyNum = row[0] || i;
+                        const varietyName = String(row[1] || '');
+                        const plantCount = parseFloat(row[8]) || 0;
+                        const estimatedYield = parseFloat(row[13]) || 0;
+                        const actualYield = parseFloat(row[14]) || 0;
+                        
+                        const expectedPerPlant = plantCount > 0 && estimatedYield > 0 ? 
+                            (estimatedYield * 1000 / plantCount).toFixed(1) : null;
+                        const actualPerPlant = plantCount > 0 && actualYield > 0 ? 
+                            (actualYield * 1000 / plantCount).toFixed(1) : null;
+                        
+                        const plan = {
+                            id: Date.now() + Math.random(),
+                            varietyNum: String(varietyNum),
+                            varietyName: varietyName,
+                            seedSource: String(row[2] || ''),
+                            seedLot: String(row[3] || ''),
+                            sowingDate: parseDateFromExcel(row[4]),
+                            transplantDate: parseDateFromExcel(row[5]),
+                            bedPlot: String(row[6] || ''),
+                            spacing: String(row[7] || ''),
+                            plantCount: plantCount,
+                            isolation: String(row[9] || ''),
+                            floweringStart: parseDateFromExcel(row[10]),
+                            harvestStart: parseDateFromExcel(row[11]),
+                            harvestEnd: parseDateFromExcel(row[12]),
+                            estimatedYield: estimatedYield,
+                            actualYield: actualYield,
+                            expectedPerPlant: expectedPerPlant,
+                            actualPerPlant: actualPerPlant,
+                            notes: String(row[15] || '')
+                        };
+                        
+                        cropPlans.push(plan);
+                        importedCount++;
+                    }
+                    
+                    saveToFirebase('cropPlans', cropPlans);
+                    loadCropPlanTable();
+                    updateReports();
+                    
+                    alert(`✅ יובאו בהצלחה ${importedCount} תכניות גידול!`);
+                    
+                } catch (error) {
+                    console.error('Import error:', error);
+                    alert('שגיאה בייבוא הקובץ. נא לוודא שהקובץ בפורמט נכון של תכנית גידול.');
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+            event.target.value = '';
+        }
+
+        function parseDateFromExcel(value) {
+            if (!value) return '';
+            
+            // If it's already a date string
+            if (typeof value === 'string') {
+                const dateMatch = value.match(/(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})/);
+                if (dateMatch) {
+                    let day = dateMatch[1].padStart(2, '0');
+                    let month = dateMatch[2].padStart(2, '0');
+                    let year = dateMatch[3];
+                    if (year.length === 2) {
+                        year = (parseInt(year) > 50 ? '19' : '20') + year;
+                    }
+                    return `${year}-${month}-${day}`;
+                }
+                return value;
+            }
+            
+            // If it's an Excel serial number
+            if (typeof value === 'number') {
+                const excelEpoch = new Date(1900, 0, 1);
+                const days = value - 2;
+                const date = new Date(excelEpoch.getTime() + days * 24 * 60 * 60 * 1000);
+                return date.toISOString().split('T')[0];
+            }
+            
+            return '';
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('he-IL');
+        }
+
+        // ==================== CROP TYPES & IMAGE UPLOAD ====================
+        
+        // Crop types data
+        let cropTypes = JSON.parse(localStorage.getItem('cropTypes')) || [
+            { id: 'sweet-pea', name: 'Sweet Pea', emoji: '🌸' },
+            { id: 'calendula', name: 'Calendula', emoji: '🌼' }
+        ];
+        let currentCropType = localStorage.getItem('currentCropType') || 'all';
+
+        function applyCropBackground() {
+            document.body.classList.remove('crop-all','crop-sweet-pea','crop-calendula','crop-other');
+            const id = currentCropType || 'all';
+            if (id === 'sweet-pea') document.body.classList.add('crop-sweet-pea');
+            else if (id === 'calendula') document.body.classList.add('crop-calendula');
+            else if (id === 'all') document.body.classList.add('crop-all');
+            else document.body.classList.add('crop-other');
+        }
+
+
+
+        // ===== Seasons filtered by current crop =====
+        function getSeasonIdsWithDataForCrop(cropId){
+            const ids = new Set();
+            if (!cropId || cropId === 'all') {
+                // show all seasons
+                seasons.forEach(s => ids.add(s.id));
+                return ids;
+            }
+            const scan = (arr) => {
+                if (!Array.isArray(arr)) return;
+                arr.forEach(e => {
+                    if (e && e.cropTypeId === cropId && e.seasonId != null) ids.add(e.seasonId);
+                });
+            };
+            scan(journalEntries);
+            scan(germinationTests);
+            scan(cropPlans);
+            return ids;
+        }
+
+        function getSeasonsForCurrentCrop(){
+            const cropId = currentCropType || 'all';
+            const ids = getSeasonIdsWithDataForCrop(cropId);
+            return seasons.filter(s => ids.has(s.id));
+        }
+
+        function ensureSeasonForCurrentCrop(){
+            const cropId = currentCropType || 'all';
+            if (cropId === 'all') return;
+            const list = getSeasonsForCurrentCrop();
+            if (list.length === 0) return;
+            const exists = list.some(s => s.id == currentSeason);
+            if (!exists) {
+                currentSeason = list[0].id;
+                try { localStorage.setItem('currentSeason', currentSeason); } catch(e){}
+                try { saveToFirebase('currentSeason', currentSeason); } catch(e){}
+            }
+        }
+
+        function isCurrentCrop(itemCropId) {
+            if (currentCropType === 'all') return true;
+            return (itemCropId || 'all') === currentCropType;
+        }
+
+
+
+        // Try to infer cropTypeId from Excel headers/row (columns like 'crop', 'גידול', 'flower', 'סוג פרח')
+        function inferCropTypeIdFromRow(headers, row){
+            try{
+                if(!headers || !row) return '';
+                const norm = (s)=>String(s||'').trim().toLowerCase();
+                const idx = headers.findIndex(h=>{
+                    const t = norm(h);
+                    return t.includes('crop') || t.includes('גידול') || t.includes('flower') || t.includes('סוג פרח') || t.includes('crop type');
+                });
+                if(idx < 0) return '';
+                const val = norm(row[idx]);
+                if(!val) return '';
+                const types = Array.isArray(window.cropTypes) ? window.cropTypes : [];
+                const ct = types.find(c=>norm(c.id)===val || norm(c.name)===val);
+                if(ct) return ct.id;
+                // common aliases
+                if(val.includes('sweet') || val.includes('pea') || val.includes('סוויט') || val.includes('טופח')) return 'sweet-pea';
+                if(val.includes('calendula') || val.includes('קלנדולה') || val.includes('ציפורן חתול')) return 'calendula';
+                return '';
+            }catch(e){
+                return '';
+            }
+        }
+
+        function getFilteredJournalEntries() {
+            let entries = Array.isArray(journalEntries) ? [...journalEntries] : [];
+            if (currentSeason) entries = entries.filter(e => e.seasonId == currentSeason);
+            entries = entries.filter(e => isCurrentCrop(e.cropTypeId));
+            return entries;
+        }
+
+        function getFilteredGerminationTests() {
+            let tests = Array.isArray(germinationTests) ? [...germinationTests] : [];
+            if (currentSeason) tests = tests.filter(t => t.seasonId == currentSeason);
+            tests = tests.filter(t => isCurrentCrop(t.cropTypeId));
+            return tests;
+        }
+
+        function getFilteredCropPlans() {
+            let plans = Array.isArray(cropPlans) ? [...cropPlans] : [];
+            if (currentSeason) plans = plans.filter(p => p.seasonId == currentSeason);
+            plans = plans.filter(p => isCurrentCrop(p.cropTypeId));
+            return plans;
+        }
+
+        
+        // Image storage for items
+        let itemImages = JSON.parse(localStorage.getItem('itemImages')) || {};
+        
+        // Initialize crop tabs
+        function initCropTabs() {
+            const tabsContainer = document.querySelector('.tabs');
+            if (!tabsContainer) return;
+            
+            const cropTabsHtml = `
+                <div class="crop-type-tabs" style="background: white; padding: 0.75rem; border-radius: 12px; margin-bottom: 1rem; box-shadow: var(--shadow-sm);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                        <span style="font-weight: 600; color: var(--primary); font-size: 1rem;">סוגי גידולים:</span>
+                        <button onclick="addNewCropType()" class="btn btn-small" style="background: var(--primary-light); color: white; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.9rem; border: none; cursor: pointer; font-weight: 600;">+ הוסף גידול</button>
+                    </div>
+                    <div id="cropTypeButtons" class="crop-type-buttons" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+                </div>
+            `;
+            tabsContainer.insertAdjacentHTML('afterbegin', cropTabsHtml);
+            renderCropTypeTabs();
+        }
+        
+        // Render crop type tabs
+        function renderCropTypeTabs() {
+            const container = document.getElementById('cropTypeButtons');
+            if (!container) return;
+            
+            const allButton = `
+                <button 
+                    class="crop-type-btn ${currentCropType === 'all' ? 'active' : ''}"
+                    onclick="switchCropType('all')"
+                    style="
+                        padding: 0.65rem 1.25rem;
+                        border: 2px solid ${currentCropType === 'all' ? 'var(--primary)' : 'var(--border)'};
+                        background: ${currentCropType === 'all' ? 'var(--primary)' : 'white'};
+                        color: ${currentCropType === 'all' ? 'white' : 'var(--text-primary)'};
+                        border-radius: 10px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        font-size: 0.95rem;
+                        transition: all 0.3s ease;
+                    ">
+                    🌱 הכל
+                </button>
+            `;
+            
+            const cropButtons = cropTypes.map(crop => `
+                <button 
+                    class="crop-type-btn ${crop.id === currentCropType ? 'active' : ''}"
+                    onclick="switchCropType('${crop.id}')"
+                    style="
+                        padding: 0.65rem 1.25rem;
+                        border: 2px solid ${crop.id === currentCropType ? 'var(--primary)' : 'var(--border)'};
+                        background: ${crop.id === currentCropType ? 'var(--primary)' : 'white'};
+                        color: ${crop.id === currentCropType ? 'white' : 'var(--text-primary)'};
+                        border-radius: 10px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        font-size: 0.95rem;
+                        transition: all 0.3s ease;
+                    ">
+                    ${crop.emoji} ${crop.name}
+                </button>
+            `).join('');
+            
+            container.innerHTML = allButton + cropButtons;
+        }
+        
+        // Switch crop type
+        function switchCropType(cropId) {
+            currentCropType = cropId;
+            localStorage.setItem('currentCropType', cropId);
+            renderCropTypeTabs();
+            applyCropBackground();
+            try { ensureSeasonForCurrentCrop(); } catch(e) {}
+            try { loadSeasons(); } catch(e) {}
+
+            // Refresh all views (safe)
+            try { loadJournalTable(); } catch(e) {}
+            try { loadGerminationTable(); } catch(e) {}
+            try { loadCropPlanTable(); } catch(e) {}
+            try { updateReports(); } catch(e) {}
+        }
+        
+        // Add new crop type
+        function addNewCropType() {
+            const name = prompt('הכנס שם גידול (באנגלית):');
+            if (!name || name.trim() === '') return;
+            
+            const emoji = prompt('בחר אימוג\'י (לדוגמה: 🌸):') || '🌱';
+            
+            const newCrop = {
+                id: name.toLowerCase().replace(/\s+/g, '-'),
+                name: name.trim(),
+                emoji: emoji
+            };
+            
+            cropTypes.push(newCrop);
+            localStorage.setItem('cropTypes', JSON.stringify(cropTypes));
+            renderCropTypeTabs();
+            alert('✅ הגידול נוסף בהצלחה!');
+        }
+        
+        // Upload image for item
+        function uploadItemImage(type, itemId) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.multiple = true;
+            
+            input.onchange = function(e) {
+                const files = Array.from(e.target.files);
+                if (files.length === 0) return;
+                
+                let processed = 0;
+                const key = `${type}-${itemId}`;
+                
+                if (!itemImages[key]) itemImages[key] = [];
+                
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        itemImages[key].push({
+                            data: event.target.result,
+                            name: file.name,
+                            date: new Date().toISOString()
+                        });
+                        
+                        processed++;
+                        if (processed === files.length) {
+                            localStorage.setItem('itemImages', JSON.stringify(itemImages));
+                            alert(`✅ ${files.length} תמונה/ות נוספו בהצלחה!`);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            };
+            
+            input.click();
+        }
+        
+        // Show item images
+        function showItemImages(type, itemId) {
+            const key = `${type}-${itemId}`;
+            const images = itemImages[key] || [];
+            
+            if (images.length === 0) {
+                alert('אין תמונות עדיין. לחץ על כפתור 📷 להעלאת תמונות.');
+                return;
+            }
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.85); z-index: 10000;
+                display: flex; align-items: center; justify-content: center;
+                padding: 2rem;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 16px; padding: 2rem; max-width: 90%; max-height: 90vh; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3 style="color: var(--primary); margin: 0; font-size: 1.5rem;">📷 תמונות (${images.length})</h3>
+                        <button onclick="this.closest('div').parentElement.remove()" 
+                            style="background: none; border: none; font-size: 2.5rem; cursor: pointer; color: #999; line-height: 1;">×</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+                        ${images.map((img, i) => `
+                            <div style="position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md);">
+                                <img src="${img.data}" style="width: 100%; height: 250px; object-fit: cover;">
+                                <div style="position: absolute; top: 12px; right: 12px; background: var(--primary); color: white; 
+                                    padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.9rem; font-weight: 700; box-shadow: var(--shadow-sm);">
+                                    #${i + 1}
+                                </div>
+                                <div style="padding: 0.75rem; background: white; font-size: 0.85rem; color: var(--text-secondary);">
+                                    ${new Date(img.date).toLocaleDateString('he-IL')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            modal.onclick = function(e) {
+                if (e.target === modal) modal.remove();
+            };
+            
+            document.body.appendChild(modal);
+        }
+        
+        // Override original loadGerminationTable to add image buttons
+        const originalLoadGerminationTable = loadGerminationTable;
+        loadGerminationTable = function() {
+            originalLoadGerminationTable();
+            setTimeout(() => {
+                const tbody = document.querySelector('#germinationTable tbody');
+                if (tbody) {
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach((row, index) => {
+                        if (index < germinationTests.length) {
+                            const test = germinationTests[index];
+                            const actionsCell = row.querySelector('td:last-child');
+                            if (actionsCell && !actionsCell.querySelector('.image-btn-container')) {
+                                const imageButtons = document.createElement('span');
+                                imageButtons.className = 'image-btn-container';
+                                imageButtons.innerHTML = `
+                                    <button class="btn btn-small" onclick="uploadItemImage('germ', ${test.id})" 
+                                        style="background: var(--info); color: white; margin-left: 0.5rem;" title="העלה תמונות">
+                                        📷
+                                    </button>
+                                    <button class="btn btn-small" onclick="showItemImages('germ', ${test.id})" 
+                                        style="background: var(--secondary); color: white; margin-left: 0.5rem;" title="צפה בתמונות">
+                                        🖼️
+                                    </button>
+                                `;
+                                actionsCell.insertBefore(imageButtons, actionsCell.firstChild);
+                            }
+                        }
+                    });
+                }
+            }, 100);
+        };
+        
+        // Override original loadCropPlanTable to add image buttons
+        const originalLoadCropPlanTable = loadCropPlanTable;
+        loadCropPlanTable = function() {
+            originalLoadCropPlanTable();
+            setTimeout(() => {
+                const tbody = document.querySelector('#cropPlanTable tbody');
+                if (tbody) {
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach((row, index) => {
+                        if (index < cropPlans.length) {
+                            const plan = cropPlans[index];
+                            const actionsCell = row.querySelector('td:last-child');
+                            if (actionsCell && !actionsCell.querySelector('.image-btn-container')) {
+                                const imageButtons = document.createElement('span');
+                                imageButtons.className = 'image-btn-container';
+                                imageButtons.innerHTML = `
+                                    <button class="btn btn-small" onclick="uploadItemImage('crop', ${plan.id})" 
+                                        style="background: var(--info); color: white; margin-left: 0.5rem;" title="העלה תמונות">
+                                        📷
+                                    </button>
+                                    <button class="btn btn-small" onclick="showItemImages('crop', ${plan.id})" 
+                                        style="background: var(--secondary); color: white; margin-left: 0.5rem;" title="צפה בתמונות">
+                                        🖼️
+                                    </button>
+                                `;
+                                actionsCell.insertBefore(imageButtons, actionsCell.firstChild);
+                            }
+                        }
+                    });
+                }
+            }, 100);
+        };
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                initCropTabs();
+                applyCropBackground();
+            }, 200);
+        });
+    
+        // ===== Ensure tables refresh when switching tabs =====
+        function refreshCurrentTab(){
+            try {
+                // call the loaders for safety
+                loadJournalTable();
+                loadGerminationTable();
+                loadCropPlanTable();
+                updateReports();
+            } catch(e){}
+        }
+
+        // Hook tab buttons (if present)
+        document.addEventListener('DOMContentLoaded', ()=>{
+            try{
+                document.querySelectorAll('button[data-tab], .tab-button, .tab-btn').forEach(btn=>{
+                    btn.addEventListener('click', ()=> setTimeout(refreshCurrentTab, 0));
+                });
+            }catch(e){}
+        });
+
+</script>
+</body>
+</html>
